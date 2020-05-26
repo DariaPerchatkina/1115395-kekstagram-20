@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дарья  Перчаткина](https://up.htmlacademy.ru/javascript/20/user/1115395).
-* Наставник: `Неизвестно`.
+* Наставник: [Юрий Белобородов] (https://htmlacademy.ru/profile/id514591).
 
 ---
 
