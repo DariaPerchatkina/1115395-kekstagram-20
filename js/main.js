@@ -93,3 +93,31 @@ var renderPhotos = function (photoElem) {
   pictures.appendChild(fragment); // добавляет фрагмент в разметку
 };
 renderPhotos(photos);
+
+var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке div с большим фото
+bigPicture.classList.remove('hidden'); // удаляет класс hidden
+
+var bigPictureImage = document.querySelector('.big-picture__img');
+var bigPictureLikes = document.querySelector('.likes-count');
+var bigPictureComments = document.querySelector('.comments-count');
+
+bigPictureImage.src = bigPicture.url;
+bigPictureLikes.textContent = bigPicture.likes;
+bigPictureComments.textContent = bigPicture.comments.count;
+
+// var socialComments = document.querySelector('.social__comments');
+
+
+// var renderPhoto = function (photo) { // создаем функцию, которая отрисовывает фото
+//   var photoElement = similarPhotoTemplate.cloneNode(true); // делаем дубликат узла template
+
+//   var photoElementPicture = photoElement.querySelector('.picture__img');
+//   var photoElementComment = photoElement.querySelector('.picture__comments');
+//   var photoElementLike = photoElement.querySelector('.picture__likes');
+
+//   photoElementPicture.src = photo.url;
+//   photoElementComment.textContent = photo.comments.length;
+//   photoElementLike.textContent = photo.likes;
+
+//   return photoElement; // возвращаем полученный склонированный элемент с новым содержимым
+// };
