@@ -10,9 +10,25 @@ var MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 var NAMES = ['Аня', 'Саша', 'Маша', 'Иван', 'Никита', 'Юля'];
+var DESCRIPTION = [
+  'Мама мия, какой закат',
+  'Какую брать - эту или эту?',
+  'Всем продуктивного дня!',
+  'А мы в отпуск!!!',
+  'Го гулять, погодка огонь!',
+  'Ешь, молись, люби, а потом иди на работу',
+  'Ставьте лайки, подписывайтесь на мой канал, жмите на колокольчик',
+  'Проснулся, умылся и ты красавчик',
+  'И пусть весь мир подождет',
+  'Видили ночь, гуляли всю ночь до утра',
+  'Рожденный ползать - летать не может сам, но на самолете вполне себе смог',
+  'Снег в апреле? Что за дела?????',
+  'Умей радоваться мелочам'
+];
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
+var photos = createPhotosRandom(COUNT);
 
 // находит случайное целое число в указанном диапазоне
 var getRandomValue = function (min, max) {
@@ -23,6 +39,8 @@ var getRandomValue = function (min, max) {
 var getRandomNoRepeat = function (arr) {
   return arr.splice(Math.floor(Math.random() * arr.length), 1);
 };
+
+var likes = getRandomValue(likesMin, likesMax);
 
 // создаем функцию, которая позволит нам получить массив индексов для фотографий
 var indexPhotoArr = []; // создаем пустой массив
@@ -35,16 +53,16 @@ var indexRandomCreate = function (count, arr) {
   }
   return indexPhotoArr;
 };
-// вызов функции с аргуметами - счетчик фото и массивом индексов
+// // вызов функции с аргуметами - счетчик фото и массивом индексов
 indexRandomCreate(COUNT, indexPhotoArr);
 
 // необходимо написать функцию, которая позволит создавать рандомное содержание описания под фотографией пользователя
-var getRandomValueForArr = function (arr) {
+var getRandomValueFromArr = function (arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
 // описание фотографии из рандомных данных и добавление в пустой массив photosArr
-var photosRandomCreate = function (count) { // создаем функцию, которая будет генерировать случайные описания фотографии пользователя
+var createPhotosRandom = function (count) { // создаем функцию, которая будет генерировать случайные описания фотографии пользователя
   var photosArr = []; // делаем пустой массив данных
 
   for (var i = 0; i < count; i++) { // условия работы цикла
@@ -52,19 +70,17 @@ var photosRandomCreate = function (count) { // создаем функцию, к
     // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив photosArr)
     photosArr.push({
       url: 'photos/' + getRandomNoRepeat(indexRandomCreate(0, indexPhotoArr)) + '.jpg',
-      // description: description,
-      likes: getRandomValue(likesMin, likesMax),
+      description: getRandomValueFromArr(DESCRIPTION),
+      likes: likes,
       comments: {
         avatar: 'img/avatar-' + getRandomValue(0, 6) + '.svg',
-        message: getRandomValueForArr(MESSAGES),
-        name: getRandomValueForArr(NAMES)
+        message: getRandomValueFromArr(MESSAGES),
+        name: getRandomValueFromArr(NAMES)
       }
     });
   }
   return photosArr;
 };
-
-var photos = photosRandomCreate(COUNT);
 
 var similarPhotoTemplate = document.querySelector('#picture') // находим элемент темплейт, куда вставим фото
   .content
