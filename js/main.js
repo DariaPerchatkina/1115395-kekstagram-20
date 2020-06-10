@@ -28,7 +28,6 @@ var DESCRIPTION = [
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
-var photos = createPhotosRandom(COUNT);
 
 // находит случайное целое число в указанном диапазоне
 var getRandomValue = function (min, max) {
@@ -36,25 +35,23 @@ var getRandomValue = function (min, max) {
 };
 
 // создадим функцию, которая позволит получать не повторющиеся элементы массива
-var getRandomNoRepeat = function (arr) {
+var getRandomNoRepeatArr = function (arr) {
   return arr.splice(Math.floor(Math.random() * arr.length), 1);
 };
-
-var likes = getRandomValue(likesMin, likesMax);
 
 // создаем функцию, которая позволит нам получить массив индексов для фотографий
 var indexPhotoArr = []; // создаем пустой массив
 
 // ф-я которая принимает аргументом счетчик и массив
 // в цикле от 1 до значения <= count дабавляй в массив индекс i и в результате после работы функции в цикле верни нам массив indexPhotoArr
-var indexRandomCreate = function (count, arr) {
+var createIndexRandomArr = function (count, arr) {
   for (var i = 1; i <= count; i++) {
     arr.push(i);
   }
   return indexPhotoArr;
 };
-// // вызов функции с аргуметами - счетчик фото и массивом индексов
-indexRandomCreate(COUNT, indexPhotoArr);
+// вызов функции с аргуметами - счетчик фото и массивом индексов
+createIndexRandomArr(COUNT, indexPhotoArr);
 
 // необходимо написать функцию, которая позволит создавать рандомное содержание описания под фотографией пользователя
 var getRandomValueFromArr = function (arr) {
@@ -69,9 +66,9 @@ var createPhotosRandom = function (count) { // создаем функцию, к
     // в процессе работы цикла создается объект
     // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив photosArr)
     photosArr.push({
-      url: 'photos/' + getRandomNoRepeat(indexRandomCreate(0, indexPhotoArr)) + '.jpg',
+      url: 'photos/' + getRandomNoRepeatArr(createIndexRandomArr(0, indexPhotoArr)) + '.jpg',
       description: getRandomValueFromArr(DESCRIPTION),
-      likes: likes,
+      likes: getRandomValue(likesMin, likesMax),
       comments: {
         avatar: 'img/avatar-' + getRandomValue(0, 6) + '.svg',
         message: getRandomValueFromArr(MESSAGES),
@@ -81,6 +78,8 @@ var createPhotosRandom = function (count) { // создаем функцию, к
   }
   return photosArr;
 };
+
+var photos = createPhotosRandom(COUNT);
 
 var similarPhotoTemplate = document.querySelector('#picture') // находим элемент темплейт, куда вставим фото
   .content
