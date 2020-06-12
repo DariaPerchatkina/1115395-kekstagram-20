@@ -9,33 +9,6 @@ var MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
-var DESCRIPTION = [
-  'Мама мия, какой закат',
-  'Опа-на, смотрите что у меня есть',
-  'Окультуриваемся',
-  'Какую брать - эту или эту?',
-  'Всем продуктивного дня!',
-  'А мы в отпуск!!!',
-  'Любите и будьте любимы',
-  'Первые шаги',
-  'От улыбки хмурый день светлей, от улыбки в небе радуга проснется',
-  'Хорошо в деревне летом',
-  'Главное чтобы близкие были рядом',
-  'Не хочу писать диплом..',
-  'Го гулять, погодка огонь!',
-  'Ешь, молись, люби, а потом иди на работу',
-  'Ставьте лайки, подписывайтесь на мой канал, жмите на колокольчик',
-  'Люблю тебя, мой милый друг',
-  'Happy every days',
-  'Проснулся, умылся и ты красавчик',
-  'И пусть весь мир подождет',
-  'Рыбак рыбака видит издалека',
-  'Скоро сказка сказывается, да не скоро дело делается',
-  'Видили ночь, гуляли всю ночь до утра',
-  'Рожденный ползать - летать не может сам, но на самолете вполне себе смог',
-  'Снег в апреле? Что за дела?????',
-  'Умей радоваться мелочам'
-];
 var NAMES = ['Аня', 'Саша', 'Маша', 'Иван', 'Никита', 'Юля'];
 var DESCRIPTION = [
   'Мама мия, какой закат',
@@ -144,22 +117,18 @@ var renderPhotos = function (photoElem) {
 var photos = createPhotosRandom(COUNT);
 renderPhotos(photos);
 
-var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке div с большим фото
+var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке элемент с большой картинкой
 bigPicture.classList.remove('hidden'); // удаляет класс hidden
 
-var socialComments = document.querySelector('.social__comments'); // находит по классу список с комментами под фото
-var commentItem = socialComments.querySelector('.social__comment'); // находит по классу элемент списка комментариев
+var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
+var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
 
 var renderCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
   var commentElement = commentItem.cloneNode(true); // делаем дубликат узла template
 
-  var commentElementAvatar = commentElement.querySelector('.social__picture');
-  var commentElementName = commentElement.querySelector('.social__picture');
-  var commentElementMessage = commentElement.querySelector('.social__text');
-
-  commentElementAvatar.src = comment.avatar;
-  commentElementName.alt = comment.name;
-  commentElementMessage.textContent = comment.message;
+  commentElement.querySelector('.social__picture').src = comment.avatar; // заполняет найденный по классу src содердимым из объекта commentObj
+  commentElement.querySelector('.social__picture').alt = comment.name; // -||- alt
+  commentElement.querySelector('.social__text').textContent = comment.message; // -||- текст комментария
 
   return commentElement; // возвращает сформированный коммент
 };
@@ -170,29 +139,18 @@ var renderComments = function (commentsElem) {
   for (var i = 0; i < commentsElem.length; i++) { // цикл
     fragment.appendChild(renderCommentElement(commentsElem[i])); // добавляет созданную фото во фрагмент
   }
-  return socialComments.appendChild(fragment); // добавляет фрагмент в разметку
+  return commentsList.appendChild(fragment); // добавляет фрагмент в разметку
 };
-renderComments(DESCRIPTION);
 
-var openBigPhoto = function () {
-  var bigPictureImage = document.querySelector('.big-picture__img');
-  var bigPictureLikes = document.querySelector('.likes-count');
-  var bigPictureComments = document.querySelector('.comments-count');
-  var bigPictureDescription = document.querySelector('.social__caption');
-
-
-  bigPictureImage.src = bigPicture.url;
-  bigPictureLikes.textContent = bigPicture.likes;
-  bigPictureComments.textContent = bigPicture.comments.length;
-  bigPictureDescription.textContent = bigPicture.description;
+var openBigPicture = function (photo) {
+  bigPicture.querySelector('.big-picture__img img').src = photo.url; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
+  bigPicture.querySelector('.social__caption').textContent = photo.description; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
+  bigPicture.querySelector('.likes-count').textContent = photo.likes; // -||- описание изображения и вписываем имя авора коммента
+  bigPicture.querySelector('.comments-count').textContent = renderComments(photo.comments); //
 };
-openBigPhoto();
 
+openBigPicture(photos[8]);
 
-var commentCount = document.querySelector('.social__comment-count');
-commentCount.classList('hidden');
-
-var commentLoader = document.querySelector('.social__comments-loader');
-commentLoader.classList('hidden');
-
-document.body.classList('.modal-open');
+bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+bigPicture.querySelector('.comments-loader').classList.add('hidden');
+document.body.classList.add('modal-open');
