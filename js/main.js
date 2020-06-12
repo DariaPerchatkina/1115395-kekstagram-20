@@ -37,76 +37,98 @@ var DESCRIPTION = [
   'Умей радоваться мелочам'
 ];
 var NAMES = ['Аня', 'Саша', 'Маша', 'Иван', 'Никита', 'Юля'];
+var DESCRIPTION = [
+  'Мама мия, какой закат',
+  'Какую брать - эту или эту?',
+  'Всем продуктивного дня!',
+  'А мы в отпуск!!!',
+  'Го гулять, погодка огонь!',
+  'Ешь, молись, люби, а потом иди на работу',
+  'Ставьте лайки, подписывайтесь на мой канал, жмите на колокольчик',
+  'Проснулся, умылся и ты красавчик',
+  'И пусть весь мир подождет',
+  'Видили ночь, гуляли всю ночь до утра',
+  'Рожденный ползать - летать не может сам, но на самолете вполне себе смог',
+  'Снег в апреле? Что за дела?????',
+  'Умей радоваться мелочам'
+];
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
 
 // находит случайное целое число в указанном диапазоне
-var getRandomValue = function (min, max) {
+var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
 // создадим функцию, которая позволит получать не повторющиеся элементы массива
-var getRandomNoRepeat = function (arr) {
+var getRandomNoRepeatArr = function (arr) {
   return arr.splice(Math.floor(Math.random() * arr.length), 1);
 };
 
-// создаем функцию, которая позволит нам получить массив индексов для фотографий
-var indexPhotoArr = []; // создаем пустой массив
-
-// ф-я которая принимает аргументом счетчик и массив
-// в цикле от 1 до значения <= count дабавляй в массив индекс i и в результате после работы функции в цикле верни нам массив indexPhotoArr
-var indexRandomCreate = function (count, arr) {
-  for (var i = 1; i <= count; i++) {
-    arr.push(i);
-  }
-  return indexPhotoArr;
-};
-// вызов функции с аргуметами - счетчик фото и массивом индексов
-indexRandomCreate(COUNT, indexPhotoArr);
-
 // необходимо написать функцию, которая позволит создавать рандомное содержание описания под фотографией пользователя
-var getRandomValueForArr = function (arr) {
+var getRandomValueFromArr = function (arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
+// ф-я которая принимает аргументом счетчик и массив
+// в цикле от 1 до значения <= count дабавляй в массив индекс i и в результате после работы функции в цикле верни нам массив indexPhotoArr
+var createIndexRandomArr = function (count) {
+  // создаем функцию, которая позволит нам получить массив индексов для фотографий
+  var indexPhotoArr = []; // создаем пустой массив
+  for (var i = 1; i <= count; i++) {
+    indexPhotoArr.push(i);
+  }
+  return indexPhotoArr;
+};
+
 // описание фотографии из рандомных данных и добавление в пустой массив photosArr
-var photosRandomCreate = function (count) { // создаем функцию, которая будет генерировать случайные описания фотографии пользователя
+var createPhotosRandom = function (count) { // создаем функцию, которая будет генерировать случайные описания фотографии пользователя
   var photosArr = []; // делаем пустой массив данных
 
   for (var i = 0; i < count; i++) { // условия работы цикла
     // в процессе работы цикла создается объект
     // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив photosArr)
-    photosArr.push({
-      url: 'photos/' + getRandomNoRepeat(indexRandomCreate(0, indexPhotoArr)) + '.jpg',
-      // description: description,
-      likes: getRandomValue(likesMin, likesMax),
-      comments: {
-        avatar: 'img/avatar-' + getRandomValue(0, 6) + '.svg',
-        message: getRandomValueForArr(MESSAGES),
-        name: getRandomValueForArr(NAMES)
-      }
-    });
+    photosArr.push(getPhotoObj());
   }
   return photosArr;
 };
 
-var photos = photosRandomCreate(COUNT);
+var getCommentObj = function () {
+  return {
+    avatar: 'img/avatar-' + getRandomNumber(0, 6) + '.svg',
+    message: getRandomValueFromArr(MESSAGES),
+    name: getRandomValueFromArr(NAMES)
+  };
+};
 
-var similarPhotoTemplate = document.querySelector('#picture') // находим элемент темплейт, куда вставим фото
-  .content
-  .querySelector('.picture');
+var getPhotoObj = function () {
+  return {
+    url: 'photos/' + getRandomNoRepeatArr(createIndexRandomArr(COUNT)) + '.jpg',
+    description: getRandomValueFromArr(DESCRIPTION),
+    likes: getRandomNumber(likesMin, likesMax),
+    comments: getRandomComments(MESSAGES, NAMES)
+  };
+};
 
-var renderPhoto = function (photo) { // создаем функцию, которая отрисовывает фото
+var getRandomComments = function () {
+  var commentsArr = [];
+  for (var i = 0; i <= getRandomNumber(1, 10); i++) {
+    commentsArr.push(getCommentObj(MESSAGES, NAMES));
+  }
+  return commentsArr;
+};
+
+var fillPhotoTemplate = function (photo) { // создаем функцию, которая отрисовывает фото
+  var similarPhotoTemplate = document.querySelector('#picture') // находим элемент темплейт, куда вставим фото
+    .content
+    .querySelector('.picture');
+
   var photoElement = similarPhotoTemplate.cloneNode(true); // делаем дубликат узла template
 
-  var photoElementPicture = photoElement.querySelector('.picture__img');
-  var photoElementComment = photoElement.querySelector('.picture__comments');
-  var photoElementLike = photoElement.querySelector('.picture__likes');
-
-  photoElementPicture.src = photo.url;
-  photoElementComment.textContent = photo.comments.length;
-  photoElementLike.textContent = photo.likes;
+  photoElement.querySelector('.picture__img').src = photo.url;
+  photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
+  photoElement.querySelector('.picture__likes').textContent = photo.likes;
 
   return photoElement; // возвращаем полученный склонированный элемент с новым содержимым
 };
@@ -115,10 +137,11 @@ var renderPhotos = function (photoElem) {
   var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
   var pictures = document.querySelector('.pictures');
   for (var i = 0; i < photoElem.length; i++) { // условия работы цикла, идет переборка массива случайно созданных фото
-    fragment.appendChild(renderPhoto(photoElem[i])); // добавляет созданное фото во фрагмент
+    fragment.appendChild(fillPhotoTemplate(photoElem[i])); // добавляет созданное фото во фрагмент
   }
   pictures.appendChild(fragment); // добавляет фрагмент в разметку
 };
+var photos = createPhotosRandom(COUNT);
 renderPhotos(photos);
 
 var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке div с большим фото
