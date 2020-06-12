@@ -160,16 +160,16 @@ var openBigPhoto = function () {
 
   bigPictureImage.src = bigPicture.url;
   bigPictureLikes.textContent = bigPicture.likes;
-  bigPictureComments.textContent = bigPicture.comments.count;
+  bigPictureComments.textContent = bigPicture.comments.length;
   bigPictureDescription.textContent = bigPicture.description;
 };
-
 openBigPhoto();
+
 
 var commentCount = document.querySelector('.social__comment-count');
 commentCount.classList('hidden');
 
-var commentLoader = document.querySelector('.comments-loader');
+var commentLoader = document.querySelector('.social__comments-loader');
 commentLoader.classList('hidden');
 
 document.body.classList('.modal-open');
