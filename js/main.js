@@ -118,7 +118,7 @@ var renderPhotos = function (photoElem) {
   pictures.appendChild(fragment); // добавляет фрагмент в разметку
 };
 var photos = createPhotosRandom(COUNT);
-renderPhotos(photos);
+
 
 var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке элемент с большой картинкой
 bigPicture.classList.remove('hidden'); // удаляет класс hidden
@@ -145,17 +145,20 @@ var renderComments = function (commentsElem) {
   commentsList.appendChild(fragment); // добавляет фрагмент в разметку
 };
 var comments = getRandomComments(COUNT);
-renderComments(comments);
+
 
 // создадим обьект, укоторый будет содержать данные открытой большой фотографии
 var openBigPicture = function (photo) {
   bigPicture.querySelector('.big-picture__img').src = photo.url; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
   bigPicture.querySelector('.social__caption').textContent = photo.description; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
   bigPicture.querySelector('.likes-count').textContent = photo.likes; // -||- описание изображения и вписываем имя авора коммента
-  bigPicture.querySelector('.comments-count').textContent = renderComments(photo.comments); //
+  bigPicture.querySelector('.comments-count').textContent = photo.comments; //
 };
-openBigPicture(photos);
 
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
 bigPicture.querySelector('.comments-loader').classList.add('hidden');
 document.body.classList.add('modal-open');
+
+renderPhotos(photos);
+renderComments(comments);
+openBigPicture(photos[0]);
