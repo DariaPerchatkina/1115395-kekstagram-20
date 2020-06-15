@@ -70,7 +70,7 @@ var createPhotosRandom = function (count) { // создаем функцию, к
   return photosArr;
 };
 
-// // описание фотографии из рандомных данных и добавление в пустой массив commentssArr
+// описание фотографии из рандомных данных и добавление в пустой массив commentssArr
 var getRandomComments = function () { // создаем функцию, которая будет генерировать случайные комментарии от пользователя
   var commentsArr = []; // делаем пустой массив данных
   for (var i = 0; i <= getRandomNumber(1, 10); i++) { // условия работы цикла
@@ -135,23 +135,23 @@ var fillCommentElement = function (comment) { // создаем функцию, 
   return commentElement; // возвращает сформированный коммент
 };
 
-var renderComments = function (commentsElem) {
+var renderComments = function (commentsArr) {
   var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
 
-  for (var i = 0; i < commentsElem.length; i++) { // цикл
-    fragment.appendChild(fillCommentElement(commentsElem[i])); // добавляет созданную фото во фрагмент
+  for (var i = 0; i < commentsArr.length; i++) { // цикл
+    fragment.appendChild(fillCommentElement(commentsArr[i])); // добавляет созданную фото во фрагмент
   }
-  commentsList.appendChild(fragment); // добавляет фрагмент в разметку
+  return fragment;
 };
-var comments = getRandomComments(COUNT);
-
 
 // создадим обьект, укоторый будет содержать данные открытой большой фотографии
 var openBigPicture = function (photo) {
-  bigPicture.querySelector('.big-picture__img').src = photo.url; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
+
+  bigPicture.querySelector('img').src = photo.url; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
   bigPicture.querySelector('.social__caption').textContent = photo.description; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
   bigPicture.querySelector('.likes-count').textContent = photo.likes; // -||- описание изображения и вписываем имя авора коммента
-  bigPicture.querySelector('.comments-count').textContent = photo.comments; //
+  bigPicture.querySelector('.comments-count').textContent = photo.comments.length; //
+  bigPicture.querySelector('.social__comments').appendChild(renderComments(photo.comments)); // добавляет фрагмент в разметку
 };
 
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
@@ -159,5 +159,4 @@ bigPicture.querySelector('.comments-loader').classList.add('hidden');
 document.body.classList.add('modal-open');
 
 renderPhotos(photos);
-renderComments(comments);
 openBigPicture(photos[0]);
