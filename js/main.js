@@ -28,6 +28,9 @@ var DESCRIPTION = [
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
+var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке элемент с большой картинкой
+var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
+
 
 // находит случайное целое число в указанном диапазоне
 var getRandomNumber = function (min, max) {
@@ -119,11 +122,7 @@ var renderPhotos = function (photoElem) {
 };
 var photos = createPhotosRandom(COUNT);
 
-
-var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке элемент с большой картинкой
 bigPicture.classList.remove('hidden'); // удаляет класс hidden
-
-var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
 
 var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
   var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
