@@ -28,6 +28,9 @@ var DESCRIPTION = [
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
+var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке элемент с большой картинкой
+var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
+
 
 // находит случайное целое число в указанном диапазоне
 var getRandomNumber = function (min, max) {
@@ -67,11 +70,22 @@ var createPhotosRandom = function (count) { // создаем функцию, к
   return photosArr;
 };
 
+// описание фотографии из рандомных данных и добавление в пустой массив commentssArr
+var getRandomComments = function () { // создаем функцию, которая будет генерировать случайные комментарии от пользователя
+  var commentsArr = []; // делаем пустой массив данных
+  for (var i = 0; i <= getRandomNumber(1, 10); i++) { // условия работы цикла
+    // в процессе работы цикла создается объект
+    // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив commetsArr)
+    commentsArr.push(getCommentObj(MESSAGES, NAMES));
+  }
+  return commentsArr;
+};
+
 var getCommentObj = function () {
   return {
-    avatar: 'img/avatar-' + getRandomNumber(0, 6) + '.svg',
-    message: getRandomValueFromArr(MESSAGES),
-    name: getRandomValueFromArr(NAMES)
+    avatar: 'img/avatar-' + getRandomNumber(1, 6) + '.svg',
+    name: getRandomValueFromArr(NAMES),
+    message: getRandomValueFromArr(MESSAGES)
   };
 };
 
@@ -82,14 +96,6 @@ var getPhotoObj = function () {
     likes: getRandomNumber(likesMin, likesMax),
     comments: getRandomComments(MESSAGES, NAMES)
   };
-};
-
-var getRandomComments = function () {
-  var commentsArr = [];
-  for (var i = 0; i <= getRandomNumber(1, 10); i++) {
-    commentsArr.push(getCommentObj(MESSAGES, NAMES));
-  }
-  return commentsArr;
 };
 
 var fillPhotoTemplate = function (photo) { // создаем функцию, которая отрисовывает фото
@@ -115,4 +121,42 @@ var renderPhotos = function (photoElem) {
   pictures.appendChild(fragment); // добавляет фрагмент в разметку
 };
 var photos = createPhotosRandom(COUNT);
+
+bigPicture.classList.remove('hidden'); // удаляет класс hidden
+
+var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
+  var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
+  var commentElement = commentItem.cloneNode(true); // делаем дубликат узла template
+
+  commentElement.querySelector('.social__picture').src = comment.avatar; // заполняет найденный по классу src содердимым из объекта commentObj
+  commentElement.querySelector('.social__picture').alt = comment.name; // -||- alt
+  commentElement.querySelector('.social__text').textContent = comment.message; // -||- текст комментария
+
+  return commentElement; // возвращает сформированный коммент
+};
+
+var renderComments = function (commentsArr) {
+  var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
+
+  for (var i = 0; i < commentsArr.length; i++) { // цикл
+    fragment.appendChild(fillCommentElement(commentsArr[i])); // добавляет созданную фото во фрагмент
+  }
+  return fragment;
+};
+
+// создадим обьект, укоторый будет содержать данные открытой большой фотографии
+var openBigPicture = function (photo) {
+
+  bigPicture.querySelector('img').src = photo.url; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
+  bigPicture.querySelector('.social__caption').textContent = photo.description; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
+  bigPicture.querySelector('.likes-count').textContent = photo.likes; // -||- описание изображения и вписываем имя авора коммента
+  bigPicture.querySelector('.comments-count').textContent = photo.comments.length; //
+  bigPicture.querySelector('.social__comments').appendChild(renderComments(photo.comments)); // добавляет фрагмент в разметку
+};
+
+bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+bigPicture.querySelector('.comments-loader').classList.add('hidden');
+document.body.classList.add('modal-open');
+
 renderPhotos(photos);
+openBigPicture(photos[0]);
