@@ -93,3 +93,6 @@ var renderPhotos = function (photoElem) {
   pictures.appendChild(fragment); // добавляет фрагмент в разметку
 };
 renderPhotos(photos);
+
+var uploadFile = document.querySelector('#upload-file');
+
