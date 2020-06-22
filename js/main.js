@@ -13,11 +13,18 @@ var NAMES = ['Аня', 'Саша', 'Маша', 'Иван', 'Никита', 'Юл
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
-var openUploadFile = document.querySelector('.img-upload__input'); // находит в разметке по id скрытый инпут
+var uploadFile = document.querySelector('#upload-file'); // находит в разметке по id скрытый инпут
 var uploadCancel = document.querySelector('#upload-cancel'); // находит в разметке по id кнопку отмены
 var uploadForm = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
 var ESC_KEY = 'Escape';
-var ENTER_KEY = 'Enter';
+// var ENTER_KEY = 'Enter';
+var MAX_LENGTH_HASHTAG = 20;
+var HASHTAG_ARR_MAX_LENGTH = 5;
+var SYMBOL = /[a-z0-9а-яA-ZА-Я-#]/;
+var imgUploadForm = document.querySelector('.img-upload__form');
+var hashtagFieldset = imgUploadForm.querySelector('.img-upload__text');
+var hashtagInput = hashtagFieldset.querySelector('input[name=hashtags]');
+var effectPin = document.querySelector('.effect-level__pin');
 
 // находит случайное целое число в указанном диапазоне
 var getRandomValue = function (min, max) {
@@ -99,7 +106,7 @@ var renderPhotos = function (photoElem) {
 };
 renderPhotos(photos);
 
-
+// открытие формы загрузки фото
 var formOpen = function () { // описывает открытие формы
   uploadForm.classList.remove('hidden'); // у формы в расметке удаляет класс hidden
   document.body.classList.add('modal-open'); // добавляет body класс modal-open
@@ -112,15 +119,56 @@ var formClose = function () { // функция закрытия формы
 
 var onPopupEscPress = function (evt) { // управление модалкой при помощи клавиатуры
   if (evt.key === ESC_KEY) { // если событие с клавиатуры строго равно значению эскейп на клавиатуре, то вызовется функция закрытия попапа
-
     formClose();
   }
 };
 
-var uploadFile = document.querySelector('#upload-file');
-
+// слушаем событие change на инпуте и открываем форму загрузки фото и открываем форму
 uploadFile.addEventListener('change', function () {
-  document.removeEventListener('keydown', onPopupEscPress);
+  document.addEventListener('keydown', onPopupEscPress);
+  formOpen();
 });
 
+// слушаем обработчик события на крестике и закрываем форму
+uploadCancel.addEventListener('click', function () {
+  document.removeEventListener('keydown', onPopupEscPress);
+  formClose();
+});
 
+// валидация
+var hashtagsValidity = function () {
+  var hashtagInputError = hashtagInput.value;
+  var lowerCaseHashtag = hashtagInputError.toLowerCase();
+  var hashtagArr = lowerCaseHashtag.split(' ');
+
+  if (hashtagInput.value.length === 0) {
+    hashtagInput.setCustomValidity('');
+  } else if (hashtagArr.length > HASHTAG_ARR_MAX_LENGTH) {
+    hashtagInput.setCustomValidity('нельзя указать больше пяти хэш-тегов');
+  } else {
+    for (var i = 0; i < hashtagArr.length; i++) {
+      if (hashtagArr[i][0] !== '#' || hashtagArr[0][0] !== '#') {
+        hashtagInput.setCustomValidity('хеш-тег начинается с #');
+      } else if (hashtagArr[i] === '#') {
+        hashtagInput.setCustomValidity('хеш-тег не может состоять только из одной решётки');
+      } else if (hashtagArr.indexOf(hashtagArr[i]) !== i) {
+        hashtagInput.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+      } else if (hashtagArr[i].length > MAX_LENGTH_HASHTAG) {
+        hashtagInput.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+      } else if (hashtagArr[i].split('#').length > 2) {
+        hashtagInput.setCustomValidity('хэш-теги должны быть разделены пробелами');
+      } else if (SYMBOL.test(hashtagArr[i])) {
+        hashtagInput.setCustomValidity('строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (@, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
+      } else {
+        hashtagInput.setCustomValidity('');
+      }
+    }
+  }
+};
+
+hashtagInput.addEventListener('input', hashtagsValidity);
+
+
+effectPin.addEventListener('mousup', function () {
+
+});
