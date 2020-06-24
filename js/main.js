@@ -18,13 +18,12 @@ var uploadCancel = document.querySelector('#upload-cancel'); // находит �
 var uploadForm = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
 var ESC_KEY = 'Escape';
 // var ENTER_KEY = 'Enter';
-var MAX_LENGTH_HASHTAG = 20;
-var HASHTAG_ARR_MAX_LENGTH = 5;
-var SYMBOL = /[a-z0-9а-яA-ZА-Я-#]/;
-var imgUploadForm = document.querySelector('.img-upload__form');
-var hashtagFieldset = imgUploadForm.querySelector('.img-upload__text');
-var hashtagInput = hashtagFieldset.querySelector('input[name=hashtags]');
 var effectPin = document.querySelector('.effect-level__pin');
+var effectList = document.querySelector('.effects__list');
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+var scaleControlSmaller = document.querySelector('.scale__control--smaller');
+var scaleControlBigger = document.querySelector('.scale__control--bigger');
+var scaleControlValue = document.querySelector('.scale__control--value');
 
 // находит случайное целое число в указанном диапазоне
 var getRandomValue = function (min, max) {
@@ -135,40 +134,40 @@ uploadCancel.addEventListener('click', function () {
   formClose();
 });
 
-// валидация
-var hashtagsValidity = function () {
-  var hashtagInputError = hashtagInput.value;
-  var lowerCaseHashtag = hashtagInputError.toLowerCase();
-  var hashtagArr = lowerCaseHashtag.split(' ');
+// При смене эффекта, выбором одного из значений среди радиокнопок .effects__radio,
+// добавить картинке внутри .img-upload__preview CSS-класс, соответствующий эффекту.
+// Например, если выбран эффект .effect-chrome, изображению нужно добавить класс effects__preview--chrome.
 
-  if (hashtagInput.value.length === 0) {
-    hashtagInput.setCustomValidity('');
-  } else if (hashtagArr.length > HASHTAG_ARR_MAX_LENGTH) {
-    hashtagInput.setCustomValidity('нельзя указать больше пяти хэш-тегов');
-  } else {
-    for (var i = 0; i < hashtagArr.length; i++) {
-      if (hashtagArr[i][0] !== '#' || hashtagArr[0][0] !== '#') {
-        hashtagInput.setCustomValidity('хеш-тег начинается с #');
-      } else if (hashtagArr[i] === '#') {
-        hashtagInput.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-      } else if (hashtagArr.indexOf(hashtagArr[i]) !== i) {
-        hashtagInput.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
-      } else if (hashtagArr[i].length > MAX_LENGTH_HASHTAG) {
-        hashtagInput.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-      } else if (hashtagArr[i].split('#').length > 2) {
-        hashtagInput.setCustomValidity('хэш-теги должны быть разделены пробелами');
-      } else if (SYMBOL.test(hashtagArr[i])) {
-        hashtagInput.setCustomValidity('строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (@, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
-      } else {
-        hashtagInput.setCustomValidity('');
-      }
-    }
+var effectChangeHandler = function (evt) {
+  // если происходит событие и оно происходит точно на инпуте с  типом radio(evt.target.matches=true), то сбрось класс и добавь тот класс, который соответстует значению valut на текущем input
+  if (evt.target && evt.target.matches('input[type="radio"]')) {
+    imgUploadPreview.classList = ''; // сбрасывает значение поля
+    imgUploadPreview.classList.add('effects__preview--' + evt.target.value);
   }
 };
 
-hashtagInput.addEventListener('input', hashtagsValidity);
-
+effectList.addEventListener('change', effectChangeHandler);
 
 effectPin.addEventListener('mousup', function () {
 
 });
+
+// редактирование размера фото
+// значение по умолчанию
+scaleControlValue.value = '100%';
+
+var scaleChangeHandler = function (evt) {
+  evt.preventDefault(); // не выполняет действие по умолчанию
+  if (scaleControlValue.value === '25%') {
+    console.log('hi');
+    imgUploadPreview.style.transform = 'scale(' + (0.25) + ')';
+  } else if (scaleControlValue.value === '50%') {
+    imgUploadPreview.style.transform = 'scale(' + (0.5) + ')';
+  } else if (scaleControlValue.value === '75%') {
+    imgUploadPreview.style.transform = 'scale(' + (0.75) + ')';
+  }
+};
+
+scaleControlSmaller.addEventListener('click', scaleChangeHandler); // кнопке "-" по клику будет присваиваться значение полученное в результате работы функции
+
+effectList.addEventListener('change', effectChangeHandler);
