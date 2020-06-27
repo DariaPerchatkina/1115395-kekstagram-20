@@ -21,9 +21,13 @@ var ESC_KEY = 'Escape';
 var effectPin = document.querySelector('.effect-level__pin');
 var effectList = document.querySelector('.effects__list');
 var imgUploadPreview = document.querySelector('.img-upload__preview');
-var scaleControlSmaller = document.querySelector('.scale__control--smaller');
-var scaleControlBigger = document.querySelector('.scale__control--bigger');
 var scaleControlValue = document.querySelector('.scale__control--value');
+var MIN_SCALE_VALUE = 25;
+var MAX_SCALE_VALUE = 100;
+var SCALE_STEP = 25;
+
+var imgUploadScale = document.querySelector('.img-upload__scale');
+
 
 // находит случайное целое число в указанном диапазоне
 var getRandomValue = function (min, max) {
@@ -148,26 +152,24 @@ var effectChangeHandler = function (evt) {
 
 effectList.addEventListener('change', effectChangeHandler);
 
-effectPin.addEventListener('mousup', function () {
-
-});
-
 // редактирование размера фото
+
 // значение по умолчанию
 scaleControlValue.value = '100%';
 
-var scaleChangeHandler = function (evt) {
-  evt.preventDefault(); // не выполняет действие по умолчанию
-  if (scaleControlValue.value === '25%') {
-    console.log('hi');
-    imgUploadPreview.style.transform = 'scale(' + (0.25) + ')';
-  } else if (scaleControlValue.value === '50%') {
-    imgUploadPreview.style.transform = 'scale(' + (0.5) + ')';
-  } else if (scaleControlValue.value === '75%') {
-    imgUploadPreview.style.transform = 'scale(' + (0.75) + ')';
+imgUploadScale.addEventListener('click', function (evt) {
+  var scaleNum = parseInt(scaleControlValue.value, 10);
+  if (scaleNum > MIN_SCALE_VALUE && evt.target.classList.contains('scale__control--smaller')) {
+    scaleNum -= SCALE_STEP;
+    scaleControlValue.value = scaleNum + '%';
+    imgUploadPreview.style.transform = 'scale(' + (scaleNum / 100) + ')';
+  } else if (scaleNum < MAX_SCALE_VALUE && evt.target.classList.contains('scale__control--bigger')) {
+    scaleNum += SCALE_STEP;
+    scaleControlValue.value = scaleNum + '%';
+    imgUploadPreview.style.transform = 'scale(' + (scaleNum / 100) + ')';
   }
-};
+});
 
-scaleControlSmaller.addEventListener('click', scaleChangeHandler); // кнопке "-" по клику будет присваиваться значение полученное в результате работы функции
+effectPin.addEventListener('mousup', function () {
 
-effectList.addEventListener('change', effectChangeHandler);
+});
