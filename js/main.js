@@ -16,12 +16,13 @@ var likesMax = 250; // макс число лайков у фото
 var uploadFile = document.querySelector('#upload-file'); // находит в разметке по id скрытый инпут
 var uploadCancel = document.querySelector('#upload-cancel'); // находит в разметке по id кнопку отмены
 var uploadForm = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
+var textHashtags = document.querySelector('.text__hashtags');
 var ESC_KEY = 'Escape';
 // var ENTER_KEY = 'Enter';
 var effectPin = document.querySelector('.effect-level__pin');
 var effectList = document.querySelector('.effects__list');
-var effectValue = document.querySelector('.effect-level__value');
-var effectLevel;
+// var effectValue = document.querySelector('.effect-level__value');
+// var effectLevel;
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var scaleControlValue = document.querySelector('.scale__control--value');
 var MIN_SCALE_VALUE = 25;
@@ -124,21 +125,29 @@ var formClose = function () { // функция закрытия формы
 
 var onPopupEscPress = function (evt) { // управление модалкой при помощи клавиатуры
   if (evt.key === ESC_KEY) { // если событие с клавиатуры строго равно значению эскейп на клавиатуре, то вызовется функция закрытия попапа
+    evt.preventDefault();
     formClose();
   }
 };
 
-// слушаем событие change на инпуте и открываем форму загрузки фото и открываем форму
-uploadFile.addEventListener('change', function () {
-  document.addEventListener('keydown', onPopupEscPress);
-  formOpen();
+textHashtags.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onPopupEscPress);
 });
 
-// слушаем обработчик события на крестике и закрываем форму
-uploadCancel.addEventListener('click', function () {
+textHashtags.addEventListener('blur', function () {
+  document.addEventListener('keydown', onPopupEscPress);
+});
+
+
+var openPhoto = function () {
+  document.addEventListener('keydown', onPopupEscPress);
+  formOpen();
+};
+
+var closePhoto = function () {
   document.removeEventListener('keydown', onPopupEscPress);
   formClose();
-});
+};
 
 // При смене эффекта, выбором одного из значений среди радиокнопок .effects__radio,
 // добавить картинке внутри .img-upload__preview CSS-класс, соответствующий эффекту.
@@ -147,32 +156,36 @@ uploadCancel.addEventListener('click', function () {
 var effectChangeHandler = function (evt) {
   // если происходит событие и оно происходит точно на инпуте с  типом radio(evt.target.matches=true), то сбрось класс и добавь тот класс, который соответстует значению valut на текущем input
   if (evt.target && evt.target.matches('input[type="radio"]')) {
-    imgUploadPreview.classList = ''; // сбрасывает значение поля
-    imgUploadPreview.classList.add('effects__preview--' + evt.target.value);
+    imgUploadPreview.className = 'img-upload__preview effects__preview--' + evt.target.value;
   }
 };
 
-effectList.addEventListener('change', effectChangeHandler);
-
 // редактирование размера фото
-
-// значение по умолчанию
-scaleControlValue.value = '100%';
+var setPhotoSize = function (value) {
+  imgUploadPreview.style.transform = 'scale(' + (value / 100) + ')';
+};
 
 imgUploadScale.addEventListener('click', function (evt) {
   var scaleNum = parseInt(scaleControlValue.value, 10);
   if (scaleNum > MIN_SCALE_VALUE && evt.target.classList.contains('scale__control--smaller')) {
     scaleNum -= SCALE_STEP;
     scaleControlValue.value = scaleNum + '%';
-    imgUploadPreview.style.transform = 'scale(' + (scaleNum / 100) + ')';
   } else if (scaleNum < MAX_SCALE_VALUE && evt.target.classList.contains('scale__control--bigger')) {
     scaleNum += SCALE_STEP;
     scaleControlValue.value = scaleNum + '%';
-    imgUploadPreview.style.transform = 'scale(' + (scaleNum / 100) + ')';
   }
+  setPhotoSize(scaleNum);
 });
 
+// слушаем событие change на инпуте и открываем форму загрузки фото и открываем форму
+uploadFile.addEventListener('change', openPhoto);
 
-effectPin.addEventListener('mousup', function () {
+// слушаем обработчик события на крестике и закрываем форму
+uploadCancel.addEventListener('click', closePhoto);
 
-});
+// смена фильтра
+effectList.addEventListener('change', effectChangeHandler);
+
+// effectPin.addEventListener('mousup', function () {
+
+// });
