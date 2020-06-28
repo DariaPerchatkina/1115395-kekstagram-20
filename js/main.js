@@ -20,6 +20,8 @@ var ESC_KEY = 'Escape';
 // var ENTER_KEY = 'Enter';
 var effectPin = document.querySelector('.effect-level__pin');
 var effectList = document.querySelector('.effects__list');
+var effectValue = document.querySelector('.effect-level__value');
+var effectLevel;
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var scaleControlValue = document.querySelector('.scale__control--value');
 var MIN_SCALE_VALUE = 25;
@@ -169,6 +171,7 @@ imgUploadScale.addEventListener('click', function (evt) {
     imgUploadPreview.style.transform = 'scale(' + (scaleNum / 100) + ')';
   }
 });
+
 
 effectPin.addEventListener('mousup', function () {
 
