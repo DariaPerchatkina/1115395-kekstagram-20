@@ -45,9 +45,7 @@ var scaleControlValue = document.querySelector('.scale__control--value');
 var MIN_SCALE_VALUE = 25;
 var MAX_SCALE_VALUE = 100;
 var SCALE_STEP = 25;
-
 var imgUploadScale = document.querySelector('.img-upload__scale');
-
 
 // находит случайное целое число в указанном диапазоне
 var getRandomNumber = function (min, max) {
@@ -140,6 +138,7 @@ var renderPhotos = function (photoElem) {
 var photos = createPhotosRandom(COUNT);
 
 // bigPicture.classList.remove('hidden'); // удаляет класс hidden
+
 
 var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
   var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
@@ -255,3 +254,4 @@ effectList.addEventListener('change', effectChangeHandler);
 effectPin.addEventListener('mousup', function () {
 
 });
+
