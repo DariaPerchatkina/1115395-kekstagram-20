@@ -30,7 +30,22 @@ var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
 var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке элемент с большой картинкой
 var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
-
+var uploadFile = document.querySelector('#upload-file'); // находит в разметке по id скрытый инпут
+var uploadCancel = document.querySelector('#upload-cancel'); // находит в разметке по id кнопку отмены
+var uploadForm = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
+var textHashtags = document.querySelector('.text__hashtags');
+var ESC_KEY = 'Escape';
+// var ENTER_KEY = 'Enter';
+var effectPin = document.querySelector('.effect-level__pin');
+var effectList = document.querySelector('.effects__list');
+// var effectValue = document.querySelector('.effect-level__value');
+// var effectLevel;
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+var scaleControlValue = document.querySelector('.scale__control--value');
+var MIN_SCALE_VALUE = 25;
+var MAX_SCALE_VALUE = 100;
+var SCALE_STEP = 25;
+var imgUploadScale = document.querySelector('.img-upload__scale');
 
 // находит случайное целое число в указанном диапазоне
 var getRandomNumber = function (min, max) {
@@ -122,7 +137,8 @@ var renderPhotos = function (photoElem) {
 };
 var photos = createPhotosRandom(COUNT);
 
-bigPicture.classList.remove('hidden'); // удаляет класс hidden
+// bigPicture.classList.remove('hidden'); // удаляет класс hidden
+
 
 var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
   var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
@@ -160,3 +176,81 @@ document.body.classList.add('modal-open');
 
 renderPhotos(photos);
 openBigPicture(photos[0]);
+
+// открытие формы загрузки фото
+var formOpen = function () { // описывает открытие формы
+  uploadForm.classList.remove('hidden'); // у формы в расметке удаляет класс hidden
+  document.body.classList.add('modal-open'); // добавляет body класс modal-open
+};
+
+var formClose = function () { // функция закрытия формы
+  uploadForm.classList.add('hidden'); // добавляет класс hidden
+  document.body.classList.remove('modal-open'); // удаляет класс открытия модального окна
+};
+
+var onPopupEscPress = function (evt) { // управление модалкой при помощи клавиатуры
+  if (evt.key === ESC_KEY) { // если событие с клавиатуры строго равно значению эскейп на клавиатуре, то вызовется функция закрытия попапа
+    evt.preventDefault();
+    formClose();
+  }
+};
+
+textHashtags.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onPopupEscPress);
+});
+
+textHashtags.addEventListener('blur', function () {
+  document.addEventListener('keydown', onPopupEscPress);
+});
+
+
+var openPhoto = function () {
+  document.addEventListener('keydown', onPopupEscPress);
+  formOpen();
+};
+
+var closePhoto = function () {
+  document.removeEventListener('keydown', onPopupEscPress);
+  formClose();
+};
+
+// слушаем событие change на инпуте и открываем форму загрузки фото и открываем форму
+uploadFile.addEventListener('change', openPhoto);
+
+// слушаем обработчик события на крестике и закрываем форму
+uploadCancel.addEventListener('click', closePhoto);
+
+// При смене эффекта, выбором одного из значений среди радиокнопок .effects__radio,
+// добавить картинке внутри .img-upload__preview CSS-класс, соответствующий эффекту.
+// Например, если выбран эффект .effect-chrome, изображению нужно добавить класс effects__preview--chrome.
+
+var effectChangeHandler = function (evt) {
+  // если происходит событие и оно происходит точно на инпуте с  типом radio(evt.target.matches=true), то сбрось класс и добавь тот класс, который соответстует значению valut на текущем input
+  if (evt.target && evt.target.matches('input[type="radio"]')) {
+    imgUploadPreview.className = 'img-upload__preview effects__preview--' + evt.target.value;
+  }
+};
+
+// редактирование размера фото
+var setPhotoSize = function (value) {
+  imgUploadPreview.style.transform = 'scale(' + (value / 100) + ')';
+};
+
+imgUploadScale.addEventListener('click', function (evt) {
+  var scaleNum = parseInt(scaleControlValue.value, 10);
+  if (scaleNum > MIN_SCALE_VALUE && evt.target.classList.contains('scale__control--smaller')) {
+    scaleNum -= SCALE_STEP;
+    scaleControlValue.value = scaleNum + '%';
+  } else if (scaleNum < MAX_SCALE_VALUE && evt.target.classList.contains('scale__control--bigger')) {
+    scaleNum += SCALE_STEP;
+    scaleControlValue.value = scaleNum + '%';
+  }
+  setPhotoSize(scaleNum);
+});
+
+// смена фильтра
+effectList.addEventListener('change', effectChangeHandler);
+
+effectPin.addEventListener('mousup', function () {
+
+});
