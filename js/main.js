@@ -47,7 +47,7 @@ var scaleParam = {
   MAX: 100,
   STEP: 25,
   MEASURE: '%'
- };
+};
 // var MIN_SCALE_VALUE = 25;
 // var MAX_SCALE_VALUE = 100;
 // var SCALE_STEP = 25;
