@@ -42,9 +42,15 @@ var effectList = document.querySelector('.effects__list');
 // var effectLevel;
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var scaleControlValue = document.querySelector('.scale__control--value');
-var MIN_SCALE_VALUE = 25;
-var MAX_SCALE_VALUE = 100;
-var SCALE_STEP = 25;
+var scaleParam = {
+  MIN: 25,
+  MAX: 100,
+  STEP: 25,
+  MEASURE: '%'
+ };
+// var MIN_SCALE_VALUE = 25;
+// var MAX_SCALE_VALUE = 100;
+// var SCALE_STEP = 25;
 var imgUploadScale = document.querySelector('.img-upload__scale');
 
 // находит случайное целое число в указанном диапазоне
@@ -236,21 +242,25 @@ var setPhotoSize = function (value) {
   imgUploadPreview.style.transform = 'scale(' + (value / 100) + ')';
 };
 
-imgUploadScale.addEventListener('click', function (evt) {
+var scaleControl = function (evt) {
   var scaleNum = parseInt(scaleControlValue.value, 10);
-  if (scaleNum > MIN_SCALE_VALUE && evt.target.classList.contains('scale__control--smaller')) {
-    scaleNum -= SCALE_STEP;
+  if (scaleNum > scaleParam.MIN && evt.target.classList.contains('scale__control--smaller')) {
+    scaleNum -= scaleParam.STEP;
     scaleControlValue.value = scaleNum + '%';
-  } else if (scaleNum < MAX_SCALE_VALUE && evt.target.classList.contains('scale__control--bigger')) {
-    scaleNum += SCALE_STEP;
+  } else if (scaleNum < scaleParam.MAX && evt.target.classList.contains('scale__control--bigger')) {
+    scaleNum += scaleParam.STEP;
     scaleControlValue.value = scaleNum + '%';
   }
   setPhotoSize(scaleNum);
-});
+};
+
+imgUploadScale.addEventListener('click', scaleControl);
 
 // смена фильтра
 effectList.addEventListener('change', effectChangeHandler);
 
-effectPin.addEventListener('mousup', function () {
+var onEffectPinMouseUp = function () {
 
-});
+};
+
+effectPin.addEventListener('mousup', onEffectPinMouseUp);
