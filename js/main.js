@@ -230,7 +230,7 @@ uploadCancel.addEventListener('click', closePhoto);
 // добавить картинке внутри .img-upload__preview CSS-класс, соответствующий эффекту.
 // Например, если выбран эффект .effect-chrome, изображению нужно добавить класс effects__preview--chrome.
 
-var effectChangeHandler = function (evt) {
+var onEffectListChange = function (evt) {
   // если происходит событие и оно происходит точно на инпуте с  типом radio(evt.target.matches=true), то сбрось класс и добавь тот класс, который соответстует значению valut на текущем input
   if (evt.target && evt.target.matches('input[type="radio"]')) {
     imgUploadPreview.className = 'img-upload__preview effects__preview--' + evt.target.value;
@@ -242,22 +242,22 @@ var setPhotoSize = function (value) {
   imgUploadPreview.style.transform = 'scale(' + (value / 100) + ')';
 };
 
-var scaleControl = function (evt) {
+var onScaleControlClick = function (evt) {
   var scaleNum = parseInt(scaleControlValue.value, 10);
   if (scaleNum > scaleParam.MIN && evt.target.classList.contains('scale__control--smaller')) {
     scaleNum -= scaleParam.STEP;
-    scaleControlValue.value = scaleNum + '%';
+    scaleControlValue.value = scaleNum + scaleParam.MEASURE;
   } else if (scaleNum < scaleParam.MAX && evt.target.classList.contains('scale__control--bigger')) {
     scaleNum += scaleParam.STEP;
-    scaleControlValue.value = scaleNum + '%';
+    scaleControlValue.value = scaleNum + scaleParam.MEASURE;
   }
   setPhotoSize(scaleNum);
 };
 
-imgUploadScale.addEventListener('click', scaleControl);
+imgUploadScale.addEventListener('click', onScaleControlClick);
 
 // смена фильтра
-effectList.addEventListener('change', effectChangeHandler);
+effectList.addEventListener('change', onEffectListChange);
 
 var onEffectPinMouseUp = function () {
 
