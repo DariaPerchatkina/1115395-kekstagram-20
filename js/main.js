@@ -254,3 +254,4 @@ effectList.addEventListener('change', effectChangeHandler);
 effectPin.addEventListener('mousup', function () {
 
 });
+
