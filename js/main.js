@@ -48,9 +48,6 @@ var scaleParam = {
   STEP: 25,
   MEASURE: '%'
 };
-// var MIN_SCALE_VALUE = 25;
-// var MAX_SCALE_VALUE = 100;
-// var SCALE_STEP = 25;
 var imgUploadScale = document.querySelector('.img-upload__scale');
 
 // находит случайное целое число в указанном диапазоне
