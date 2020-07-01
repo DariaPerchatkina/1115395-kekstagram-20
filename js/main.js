@@ -42,9 +42,12 @@ var effectList = document.querySelector('.effects__list');
 // var effectLevel;
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var scaleControlValue = document.querySelector('.scale__control--value');
-var MIN_SCALE_VALUE = 25;
-var MAX_SCALE_VALUE = 100;
-var SCALE_STEP = 25;
+var scaleParam = {
+  MIN: 25,
+  MAX: 100,
+  STEP: 25,
+  MEASURE: '%'
+};
 var imgUploadScale = document.querySelector('.img-upload__scale');
 
 // находит случайное целое число в указанном диапазоне
@@ -224,7 +227,7 @@ uploadCancel.addEventListener('click', closePhoto);
 // добавить картинке внутри .img-upload__preview CSS-класс, соответствующий эффекту.
 // Например, если выбран эффект .effect-chrome, изображению нужно добавить класс effects__preview--chrome.
 
-var effectChangeHandler = function (evt) {
+var onEffectListChange = function (evt) {
   // если происходит событие и оно происходит точно на инпуте с  типом radio(evt.target.matches=true), то сбрось класс и добавь тот класс, который соответстует значению valut на текущем input
   if (evt.target && evt.target.matches('input[type="radio"]')) {
     imgUploadPreview.className = 'img-upload__preview effects__preview--' + evt.target.value;
@@ -236,21 +239,25 @@ var setPhotoSize = function (value) {
   imgUploadPreview.style.transform = 'scale(' + (value / 100) + ')';
 };
 
-imgUploadScale.addEventListener('click', function (evt) {
+var onScaleControlClick = function (evt) {
   var scaleNum = parseInt(scaleControlValue.value, 10);
-  if (scaleNum > MIN_SCALE_VALUE && evt.target.classList.contains('scale__control--smaller')) {
-    scaleNum -= SCALE_STEP;
-    scaleControlValue.value = scaleNum + '%';
-  } else if (scaleNum < MAX_SCALE_VALUE && evt.target.classList.contains('scale__control--bigger')) {
-    scaleNum += SCALE_STEP;
-    scaleControlValue.value = scaleNum + '%';
+  if (scaleNum > scaleParam.MIN && evt.target.classList.contains('scale__control--smaller')) {
+    scaleNum -= scaleParam.STEP;
+    scaleControlValue.value = scaleNum + scaleParam.MEASURE;
+  } else if (scaleNum < scaleParam.MAX && evt.target.classList.contains('scale__control--bigger')) {
+    scaleNum += scaleParam.STEP;
+    scaleControlValue.value = scaleNum + scaleParam.MEASURE;
   }
   setPhotoSize(scaleNum);
-});
+};
+
+imgUploadScale.addEventListener('click', onScaleControlClick);
 
 // смена фильтра
-effectList.addEventListener('change', effectChangeHandler);
+effectList.addEventListener('change', onEffectListChange);
 
-effectPin.addEventListener('mousup', function () {
+var onEffectPinMouseUp = function () {
 
-});
+};
+
+effectPin.addEventListener('mousup', onEffectPinMouseUp);
