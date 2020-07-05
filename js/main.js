@@ -28,23 +28,28 @@ var DESCRIPTION = [
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
+var pictures = document.querySelector('.pictures');
 var bigPicture = document.querySelector('.big-picture'); // находит по классу разметке элемент с большой картинкой
+var bigPictureCancel = document.querySelector('.big-picture__cancel');
 var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
 var uploadFile = document.querySelector('#upload-file'); // находит в разметке по id скрытый инпут
 var uploadCancel = document.querySelector('#upload-cancel'); // находит в разметке по id кнопку отмены
 var uploadForm = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
 var textHashtags = document.querySelector('.text__hashtags');
 var ESC_KEY = 'Escape';
-// var ENTER_KEY = 'Enter';
+var ENTER_KEY = 'Enter';
 var effectPin = document.querySelector('.effect-level__pin');
 var effectList = document.querySelector('.effects__list');
 // var effectValue = document.querySelector('.effect-level__value');
 // var effectLevel;
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var scaleControlValue = document.querySelector('.scale__control--value');
-var MIN_SCALE_VALUE = 25;
-var MAX_SCALE_VALUE = 100;
-var SCALE_STEP = 25;
+var scaleParam = {
+  MIN: 25,
+  MAX: 100,
+  STEP: 25,
+  MEASURE: '%'
+};
 var imgUploadScale = document.querySelector('.img-upload__scale');
 
 // находит случайное целое число в указанном диапазоне
@@ -80,7 +85,7 @@ var createPhotosRandom = function (count) { // создаем функцию, к
   for (var i = 0; i < count; i++) { // условия работы цикла
     // в процессе работы цикла создается объект
     // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив photosArr)
-    photosArr.push(getPhotoObj());
+    photosArr.push(getPhotoObj(i));
   }
   return photosArr;
 };
@@ -104,8 +109,9 @@ var getCommentObj = function () {
   };
 };
 
-var getPhotoObj = function () {
+var getPhotoObj = function (i) {
   return {
+    id: i,
     url: 'photos/' + getRandomNoRepeatArr(createIndexRandomArr(COUNT)) + '.jpg',
     description: getRandomValueFromArr(DESCRIPTION),
     likes: getRandomNumber(likesMin, likesMax),
@@ -123,13 +129,14 @@ var fillPhotoTemplate = function (photo) { // создаем функцию, к�
   photoElement.querySelector('.picture__img').src = photo.url;
   photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
   photoElement.querySelector('.picture__likes').textContent = photo.likes;
+  photoElement.dataset.id = photo.id;
 
   return photoElement; // возвращаем полученный склонированный элемент с новым содержимым
 };
 
 var renderPhotos = function (photoElem) {
   var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
-  var pictures = document.querySelector('.pictures');
+  // var pictures = document.querySelector('.pictures');
   for (var i = 0; i < photoElem.length; i++) { // условия работы цикла, идет переборка массива случайно созданных фото
     fragment.appendChild(fillPhotoTemplate(photoElem[i])); // добавляет созданное фото во фрагмент
   }
@@ -224,7 +231,7 @@ uploadCancel.addEventListener('click', closePhoto);
 // добавить картинке внутри .img-upload__preview CSS-класс, соответствующий эффекту.
 // Например, если выбран эффект .effect-chrome, изображению нужно добавить класс effects__preview--chrome.
 
-var effectChangeHandler = function (evt) {
+var onEffectListChange = function (evt) {
   // если происходит событие и оно происходит точно на инпуте с  типом radio(evt.target.matches=true), то сбрось класс и добавь тот класс, который соответстует значению valut на текущем input
   if (evt.target && evt.target.matches('input[type="radio"]')) {
     imgUploadPreview.className = 'img-upload__preview effects__preview--' + evt.target.value;
@@ -236,22 +243,63 @@ var setPhotoSize = function (value) {
   imgUploadPreview.style.transform = 'scale(' + (value / 100) + ')';
 };
 
-imgUploadScale.addEventListener('click', function (evt) {
+var onScaleControlClick = function (evt) {
   var scaleNum = parseInt(scaleControlValue.value, 10);
-  if (scaleNum > MIN_SCALE_VALUE && evt.target.classList.contains('scale__control--smaller')) {
-    scaleNum -= SCALE_STEP;
-    scaleControlValue.value = scaleNum + '%';
-  } else if (scaleNum < MAX_SCALE_VALUE && evt.target.classList.contains('scale__control--bigger')) {
-    scaleNum += SCALE_STEP;
-    scaleControlValue.value = scaleNum + '%';
+  if (scaleNum > scaleParam.MIN && evt.target.classList.contains('scale__control--smaller')) {
+    scaleNum -= scaleParam.STEP;
+    scaleControlValue.value = scaleNum + scaleParam.MEASURE;
+  } else if (scaleNum < scaleParam.MAX && evt.target.classList.contains('scale__control--bigger')) {
+    scaleNum += scaleParam.STEP;
+    scaleControlValue.value = scaleNum + scaleParam.MEASURE;
   }
   setPhotoSize(scaleNum);
-});
+};
+
+imgUploadScale.addEventListener('click', onScaleControlClick);
 
 // смена фильтра
-effectList.addEventListener('change', effectChangeHandler);
+effectList.addEventListener('change', onEffectListChange);
 
-effectPin.addEventListener('mousup', function () {
+var onEffectPinMouseUp = function () {
 
-});
+};
 
+effectPin.addEventListener('mousup', onEffectPinMouseUp);
+
+var onOpenBigPhotoEnterPress = function (evt) {
+  if (evt.key === ENTER_KEY) {
+    // идем по селектору вверх по родителю и находит в элементе-родитель с классом  picture и ы нем найдет id
+    var picture = evt.target.closest('.picture');
+    if (picture) {
+      var id = picture.dataset.id;
+      openBigPicture(getPhotoObj[id]);
+    }
+  }
+};
+
+// открытие большой случайной фотографии
+var onOpenRandomBigPhotoClick = function (evt) {
+  var picture = evt.target.closest('.picture');
+  if (picture) {
+    var id = picture.dataset.id;
+    openBigPicture(getPhotoObj[id]);
+  }
+};
+
+// Закрытие большого фото
+var closeBigPicture = function () {
+  bigPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onCloseBigPictureEscapePress);
+  bigPictureCancel.removeEventListener('keydown', closeBigPicture);
+};
+
+var onCloseBigPictureEscapePress = function (evt) {
+  if (evt.keyCode === ESC_KEY) {
+    closeBigPicture();
+  }
+};
+
+// обработчики для случайных фото
+pictures.addEventListener('click', onOpenRandomBigPhotoClick);
+pictures.addEventListener('keydown', onOpenBigPhotoEnterPress);
