@@ -266,13 +266,20 @@ var onEffectPinMouseUp = function () {
 
 effectPin.addEventListener('mousup', onEffectPinMouseUp);
 
+var getPictureData = function (data, pictureId) {
+  var pictureData = data.find(function (item) {
+    return +item.id === +pictureId;
+  });
+  return pictureData;
+};
+
 var onOpenBigPhotoEnterPress = function (evt) {
   if (evt.key === ENTER_KEY) {
     // идем по селектору вверх по родителю и находит в элементе-родитель с классом  picture и ы нем найдет id
     var picture = evt.target.closest('.picture');
     if (picture) {
       var id = picture.dataset.id;
-      openBigPicture(getPhotoObj[id]);
+      openBigPicture(getPictureData(id));
     }
   }
 };
@@ -282,7 +289,14 @@ var onOpenRandomBigPhotoClick = function (evt) {
   var picture = evt.target.closest('.picture');
   if (picture) {
     var id = picture.dataset.id;
-    openBigPicture(getPhotoObj[id]);
+    var getPictureData = function (data, pictureId) {
+      var pictureData = data.find(function (item) {
+        return +item.id === +pictureId;
+      });
+      return pictureData;
+    };
+    console.log(getPictureData(createPhotosRandom(id), id));
+    // openBigPicture(getPictureData(createPhotosRandom(), id));
   }
 };
 
@@ -303,3 +317,19 @@ var onCloseBigPictureEscapePress = function (evt) {
 // обработчики для случайных фото
 pictures.addEventListener('click', onOpenRandomBigPhotoClick);
 pictures.addEventListener('keydown', onOpenBigPhotoEnterPress);
+
+
+// валидация
+var inputHashtag = document.querySelector('.text__hashtags');
+// var MAX_LENGT_HASHTAG = 20;
+var HASHTAG_COUNT = 5;
+
+var hashtagsValidity = function () {
+  if (inputHashtag.value === 0) {
+    inputHashtag.setCustomValidity('');
+  } else if (inputHashtag.value > HASHTAG_COUNT) {
+    inputHashtag.setCustomValidity('не больше 5 хэштегов');
+  }
+  }
+};
+inputHashtag.addEventListener('input', hashtagsValidity);
