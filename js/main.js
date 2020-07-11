@@ -272,6 +272,7 @@ var getPictureData = function (data, pictureId) {
   });
   return pictureData;
 };
+console.log(getPictureData(photos, getPhotoObj.id));
 
 var onOpenBigPhotoEnterPress = function (evt) {
   if (evt.key === ENTER_KEY) {
@@ -289,14 +290,8 @@ var onOpenRandomBigPhotoClick = function (evt) {
   var picture = evt.target.closest('.picture');
   if (picture) {
     var id = picture.dataset.id;
-    var getPictureData = function (data, pictureId) {
-      var pictureData = data.find(function (item) {
-        return +item.id === +pictureId;
-      });
-      return pictureData;
-    };
-    console.log(getPictureData(createPhotosRandom(id), id));
-    // openBigPicture(getPictureData(createPhotosRandom(), id));
+    console.log(getPictureData(photos, id));
+    openBigPicture(getPictureData(id));
   }
 };
 
@@ -329,7 +324,6 @@ var hashtagsValidity = function () {
     inputHashtag.setCustomValidity('');
   } else if (inputHashtag.value > HASHTAG_COUNT) {
     inputHashtag.setCustomValidity('не больше 5 хэштегов');
-  }
   }
 };
 inputHashtag.addEventListener('input', hashtagsValidity);
