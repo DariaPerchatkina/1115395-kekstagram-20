@@ -329,20 +329,18 @@ var hashtagsValidity = function () {
   // если хэштегов нет, то очистим поле ошибки
   if (inputHashtag.value.length === 0) {
     inputHashtag.setCustomValidity('');
-    // если количество хэштегов больше 5, то выведем ошибку
-  } else if (hashtagArr.value.length > HASHTAG_COUNT) {
-    inputHashtag.setCustomValidity('не больше 5 хэштегов');
+  } else if (hashtagArr.length > HASHTAG_COUNT) {
+    inputHashtag.setCustomValidity('нельзя указать больше пяти хэш-тегов');
   } else {
-    // проверим все хэштеги в поле input
-    for (var i = 0; i < hashtagArr; i++) {
-      if (hashtagArr[i].length === MAX_LENGT_HASHTAG) {
-        inputHashtag.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+    for (var i = 0; i < hashtagArr.length; i++) {
+      if (hashtagArr[i][0] !== '#' || hashtagArr[0][0] !== '#') {
+        inputHashtag.setCustomValidity('хеш-тег начинается с #');
       } else if (hashtagArr[i] === '#') {
         inputHashtag.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-      } else if (hashtagArr[i][0] !== '#' || hashtagArr[0][0] !== '#') {
-        inputHashtag.setCustomValidity('хеш-тег начинается с #');
       } else if (hashtagArr.indexOf(hashtagArr[i]) !== i) {
         inputHashtag.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+      } else if (hashtagArr[i].length > MAX_LENGT_HASHTAG) {
+        inputHashtag.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
       } else if (hashtagArr[i].split('#').length > 2) {
         inputHashtag.setCustomValidity('хэш-теги должны быть разделены пробелами');
       } else if (SYMBOL.test(hashtagArr[i])) {
