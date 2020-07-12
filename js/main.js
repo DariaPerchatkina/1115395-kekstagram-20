@@ -173,20 +173,19 @@ var renderComments = function (commentsArr) {
 
 // создадим обьект, укоторый будет содержать данные открытой большой фотографии
 var openBigPicture = function (photo) {
-
   bigPicture.querySelector('img').src = photo.url; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
   bigPicture.querySelector('.social__caption').textContent = photo.description; // находим в ДОМ адрес изображение аватарки и подставляем фото автора коммента
   bigPicture.querySelector('.likes-count').textContent = photo.likes; // -||- описание изображения и вписываем имя авора коммента
   bigPicture.querySelector('.comments-count').textContent = photo.comments.length; //
   bigPicture.querySelector('.social__comments').appendChild(renderComments(photo.comments)); // добавляет фрагмент в разметку
+  bigPicture.classList.remove('hidden');
 };
 
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
 bigPicture.querySelector('.comments-loader').classList.add('hidden');
-document.body.classList.add('modal-open');
+// document.body.classList.add('modal-open');
 
 renderPhotos(photos);
-openBigPicture(photos[0]);
 
 // открытие формы загрузки фото
 var formOpen = function () { // описывает открытие формы
@@ -270,6 +269,12 @@ var onEffectPinMouseUp = function () {
 
 effectPin.addEventListener('mousup', onEffectPinMouseUp);
 
+var getPictureData = function (data, pictureId) {
+  var pictureData = data.find(function (item) {
+    return +item.id === +pictureId;
+  });
+  return pictureData;
+};
 
 var onOpenBigPhotoEnterPress = function (evt) {
   if (evt.key === ENTER_KEY) {
@@ -277,7 +282,8 @@ var onOpenBigPhotoEnterPress = function (evt) {
     var picture = evt.target.closest('.picture');
     if (picture) {
       var id = picture.dataset.id;
-      openBigPicture((id));
+      var pictureObj = getPictureData(photos, id);
+      openBigPicture(pictureObj);
     }
   }
 };
@@ -287,24 +293,15 @@ var onOpenRandomBigPhotoClick = function (evt) {
   var picture = evt.target.closest('.picture');
   if (picture) {
     var id = picture.dataset.id;
-    var getPictureData = function (data, pictureId) {
-      var pictureData = data.find(function (item) {
-        return +item.id === +pictureId;
-      });
-      return pictureData;
-    };
-    // console.log(getPictureData());
-    // console.log(getPictureData(photos, id));
-    openBigPicture(getPictureData(id));
+    var pictureObj = getPictureData(photos, id);
+    openBigPicture(pictureObj);
   }
 };
 
 // Закрытие большого фото
 var closeBigPicture = function () {
   bigPicture.classList.add('hidden');
-  document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseBigPictureEscapePress);
-  bigPictureCancel.removeEventListener('keydown', closeBigPicture);
 };
 
 var onCloseBigPictureEscapePress = function (evt) {
@@ -313,10 +310,14 @@ var onCloseBigPictureEscapePress = function (evt) {
   }
 };
 
+
 // обработчики для случайных фото
 pictures.addEventListener('click', onOpenRandomBigPhotoClick);
 pictures.addEventListener('keydown', onOpenBigPhotoEnterPress);
 
+// слушаем обработчик события на крестике и закрываем форму
+bigPictureCancel.addEventListener('click', closeBigPicture);
+bigPictureCancel.addEventListener('keydown', onCloseBigPictureEscapePress);
 
 // валидация
 var hashtagsValidity = function () {
