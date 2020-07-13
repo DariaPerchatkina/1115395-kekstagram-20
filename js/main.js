@@ -299,24 +299,23 @@ var onOpenRandomBigPhotoClick = function (evt) {
 };
 
 // Закрытие большого фото
-var closeBigPicture = function () {
+var closeRandomBigPicture = function () {
   bigPicture.classList.add('hidden');
   document.removeEventListener('keydown', onCloseBigPictureEscapePress);
 };
 
 var onCloseBigPictureEscapePress = function (evt) {
   if (evt.keyCode === ESC_KEY) {
-    closeBigPicture();
+    closeRandomBigPicture();
   }
 };
-
 
 // обработчики для случайных фото
 pictures.addEventListener('click', onOpenRandomBigPhotoClick);
 pictures.addEventListener('keydown', onOpenBigPhotoEnterPress);
 
 // слушаем обработчик события на крестике и закрываем форму
-bigPictureCancel.addEventListener('click', closeBigPicture);
+bigPictureCancel.addEventListener('click', closeRandomBigPicture);
 bigPictureCancel.addEventListener('keydown', onCloseBigPictureEscapePress);
 
 // валидация
@@ -344,7 +343,7 @@ var hashtagsValidity = function () {
         inputHashtag.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
       } else if (hashtagArr[i].split('#').length > 2) {
         inputHashtag.setCustomValidity('хэш-теги должны быть разделены пробелами');
-      } else if (SYMBOL.test(hashtagArr[i])) {
+      } else if (SYMBOL.test(textHashtags.value)) {
         inputHashtag.setCustomValidity('строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (@, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
       } else {
         inputHashtag.setCustomValidity('');
@@ -353,3 +352,26 @@ var hashtagsValidity = function () {
   }
 };
 inputHashtag.addEventListener('input', hashtagsValidity);
+
+// валидация - когда фокус на комменте - не закрывать его
+var textDescription = document.querySelector('.text__description');
+var COMMENT_COUNT = 140;
+textDescription.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onPopupEscPress);
+});
+
+textDescription.addEventListener('blur', function () {
+  document.addEventListener('keydown', onPopupEscPress);
+});
+
+// валидация коммента
+var commentValidity = function () {
+  if (textDescription.value.length === 0) {
+    textDescription.setCustomValidity('');
+  } else if (textDescription.value.length > COMMENT_COUNT) {
+    textDescription.setCustomValidity('не больше 140 символов');
+  } else {
+    textDescription.setCustomValidity('');
+  }
+};
+textDescription.addEventListener('input', commentValidity);
