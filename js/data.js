@@ -29,6 +29,6 @@
   window.data = {
     Messages: MESSAGES,
     Names: NAMES,
-    Description: DESCRIPTION
+    Description: DESCRIPTION,
   };
 })();

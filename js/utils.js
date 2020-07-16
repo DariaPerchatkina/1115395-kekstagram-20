@@ -18,9 +18,17 @@
     return arr[Math.floor(Math.random() * arr.length)];
   };
 
+
+  var COUNT = 25; // счетчик числа фотографий
+  var likesMin = 15; // мин число лайков у фото
+  var likesMax = 250; // макс число лайков у фото
+
   window.utils = {
     getRandomNumber: getRandomNumber,
     getRandomNoRepeatArr: getRandomNoRepeatArr,
-    getRandomValueFromArr: getRandomValueFromArr
+    getRandomValueFromArr: getRandomValueFromArr,
+    Count: COUNT,
+    LikesMin: likesMin,
+    LikesMax: likesMax
   };
 })();
