@@ -118,6 +118,10 @@
   renderPhotos(photos);
 
   window.images = {
-
+    bigPicture: bigPicture,
+    pictures: pictures,
+    commentsList: commentsList,
+    photos: photos,
+    openBigPicture: openBigPicture
   };
 })();
