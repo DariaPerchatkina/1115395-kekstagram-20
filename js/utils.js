@@ -27,7 +27,7 @@
     getRandomNumber: getRandomNumber,
     getRandomNoRepeatArr: getRandomNoRepeatArr,
     getRandomValueFromArr: getRandomValueFromArr,
-    Count: COUNT,
+    COUNT: COUNT,
     LikesMin: likesMin,
     LikesMax: likesMax
   };

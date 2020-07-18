@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var data = {};
+
   var MESSAGES = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
@@ -26,9 +28,14 @@
     'Умей радоваться мелочам'
   ];
 
-  window.data = {
-    Messages: MESSAGES,
-    Names: NAMES,
-    Description: DESCRIPTION,
-  };
+  // window.data = {
+  //   MESSAGES: MESSAGES,
+  //   NAMES: NAMES,
+  //   DESCRIPTION: DESCRIPTION
+  // };
+  data.messages = MESSAGES;
+  data.names = NAMES;
+  data.description = DESCRIPTION;
+
+  window.data = data;
 })();

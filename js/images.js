@@ -78,8 +78,10 @@
       fragment.appendChild(fillPhotoTemplate(photoElem[i])); // добавляет созданное фото во фрагмент
     }
     pictures.appendChild(fragment); // добавляет фрагмент в разметку
+    console.log(photoElem);
   };
   var photos = createPhotosRandom(window.utils.COUNT);
+  console.log(photos);
 
   var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
     var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
