@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var effect = {};
   var effectList = document.querySelector('.effects__list');
   var imgUploadPreview = document.querySelector('.img-upload__preview');
 
@@ -13,4 +14,6 @@
 
   // смена фильтра
   effectList.addEventListener('change', onEffectListChange);
+
+  window.effect = effect;
 })();

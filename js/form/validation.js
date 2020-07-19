@@ -3,7 +3,6 @@
 (function () {
   var validation = {};
   var form = window.form;
-  var textHashtags = document.querySelector('.text__hashtags');
   var inputHashtag = document.querySelector('.text__hashtags');
   var MAX_LENGT_HASHTAG = 20;
   var HASHTAG_COUNT = 5;
@@ -35,7 +34,7 @@
           inputHashtag.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
         } else if (hashtagArr[i].split('#').length > 2) {
           inputHashtag.setCustomValidity('хэш-теги должны быть разделены пробелами');
-        } else if (!SYMBOL.test(textHashtags.value)) {
+        } else if (!SYMBOL.test(inputHashtag.value)) {
           inputHashtag.setCustomValidity('строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (@, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
         } else {
           inputHashtag.setCustomValidity('');
@@ -53,6 +52,14 @@
   }
 
   inputHashtag.addEventListener('input', hashtagsValidity);
+
+  inputHashtag.addEventListener('focus', function () {
+    document.removeEventListener('keydown', form.onPopupEscPress);
+  });
+
+  inputHashtag.addEventListener('blur', function () {
+    document.addEventListener('keydown', form.onPopupEscPress);
+  });
 
   // валидация - когда фокус на комменте - не закрывать его
   textDescription.addEventListener('focus', function () {

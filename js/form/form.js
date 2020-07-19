@@ -24,6 +24,7 @@
       formClose();
     }
   };
+
   var openPhoto = function () {
     document.addEventListener('keydown', onPopupEscPress);
     formOpen();
