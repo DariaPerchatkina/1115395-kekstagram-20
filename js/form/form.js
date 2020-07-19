@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var form = {};
   var utils = window.utils;
   var uploadForm = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
   var uploadCancel = document.querySelector('#upload-cancel'); // находит в разметке по id кнопку отмены
@@ -38,4 +39,5 @@
   // слушаем обработчик события на крестике и закрываем форму
   uploadCancel.addEventListener('click', closePhoto);
 
+  window.form = form;
 })();
