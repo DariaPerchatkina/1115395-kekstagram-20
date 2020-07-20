@@ -31,5 +31,7 @@
 
   imgUploadScale.addEventListener('click', onScaleControlClick);
 
+  scale.scaleControlValue = scaleControlValue;
+  scale.imgUploadPreview = imgUploadPreview;
   window.scale = scale;
 })();
