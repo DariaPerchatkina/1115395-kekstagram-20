@@ -2,10 +2,11 @@
 
 (function () {
   var effect = {};
-  var slider = window.slider;
+  // var slider = window.slider;
   var effectList = document.querySelector('.effects__list');
-  var effectLevelValue = document.querySelector('.effect-level__value');
+  // var effectLevelValue = document.querySelector('.effect-level__value');
   var imgUploadPreview = document.querySelector('.img-upload__preview');
+  var MAX_SLIDER_VALUE = 455;
 
   var onEffectListChange = function (evt) {
     // если происходит событие и оно происходит точно на инпуте с  типом radio(evt.target.matches=true), то сбрось класс и добавь тот класс, который соответстует значению valut на текущем input
@@ -14,48 +15,64 @@
     }
   };
 
-  function setFilterValue(filterName, percent) {
-    switch (filterName) {
-      case 'none':
-        imgUploadPreview.style.filter = '';
+  var setCoefToSlider = function (filterName, maxValue, simbol) {
+    var coef = window.slider.uploadEffectLevelPin.offsetLeft / MAX_SLIDER_VALUE;
+    window.picturesetup.effectImage.style.filter = filterName + '(' + (maxValue * coef) + simbol + ')';
+  };
+
+  var filtrtImage = {
+    chrome: {
+      filter: 'grayscale',
+      maxEffectValue: 1
+    },
+    sepia:
+    {
+      filter: 'sepia',
+      maxEffectValue: 1
+    },
+    marvin:
+      {
+        filter: 'invert',
+        maxEffectValue: 1
+      },
+    phobos:
+    {
+      filter: 'blur',
+      maxEffectValue: 3
+    },
+    heat:
+      {
+        filter: 'brightness',
+        maxEffectValue: 3
+      }
+  };
+
+  var setFilterEffectToImage = function () {
+    switch (window.picturesetup.effectImage.id) {
+      case 'effect-none':
+        window.picturesetup.effectImage.style.filter = '';
         break;
-      case 'chrome':
-        imgUploadPreview.style.filter = 'grayscale(' + percent / 100 + ')';
+      case 'effect-chrome':
+        setCoefToSlider(filtrtImage.chrome.filter, filtrtImage.chrome.maxEffectValue, '');
         break;
-      case 'sepia':
-        imgUploadPreview.style.filter = 'sepia(' + percent / 100 + ')';
+      case 'effect-sepia':
+        setCoefToSlider(filtrtImage.sepia.filter, filtrtImage.sepia.maxEffectValue, '');
         break;
-      case 'marvin':
-        imgUploadPreview.style.filter = 'invert(' + percent + '%)';
+      case 'effect-marvin':
+        setCoefToSlider(filtrtImage.marvin.filter, filtrtImage.marvin.maxEffectValue, '');
         break;
-      case 'phobos':
-        imgUploadPreview.style.filter = 'blur(' + (percent * 3 / 100) + 'px)';
+      case 'effect-phobos':
+        setCoefToSlider(filtrtImage.phobos.filter, filtrtImage.phobos.maxEffectValue, 'px');
         break;
-      case 'heat':
-        imgUploadPreview.style.filter = 'brightness(' + percent * 3 / 100 + ')';
+      case 'effect-heat':
+        setCoefToSlider(filtrtImage.heat.filter, filtrtImage.heat.maxEffectValue, '');
         break;
     }
-  }
-
-  function getLevelPin() {
-    var positionX = slider.effectPin.offsetLeft;
-    var lineWidth = slider.effectLine.offsetWidth;
-    var percent = Math.round(100 * positionX / lineWidth);
-    return percent;
-  }
-
-  function changeFilterValue() {
-    var current = document.querySelector('.effects__radio:checked');
-    var percent = getLevelPin();
-    effectLevelValue.value = percent;
-    effect.setFilterValue(current.value, percent);
-  }
+  };
 
   // смена фильтра
   effectList.addEventListener('change', onEffectListChange);
 
-  effect.setFilterValue = setFilterValue;
-
-  effect.changeFilterValue = changeFilterValue;
+  effect.setFilterEffectToImage = setFilterEffectToImage;
   window.effect = effect;
 })();
