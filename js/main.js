@@ -1,5 +1,4 @@
 'use strict';
-
 // создадим массив имен пользователей и их сообщения
 var MESSAGES = [
   'Всё отлично!',
@@ -25,6 +24,7 @@ var DESCRIPTION = [
   'Снег в апреле? Что за дела?????',
   'Умей радоваться мелочам'
 ];
+
 var COUNT = 25; // счетчик числа фотографий
 var likesMin = 15; // мин число лайков у фото
 var likesMax = 250; // макс число лайков у фото
@@ -148,8 +148,6 @@ var renderPhotos = function (photoElem) {
   pictures.appendChild(fragment); // добавляет фрагмент в разметку
 };
 var photos = createPhotosRandom(COUNT);
-
-// bigPicture.classList.remove('hidden'); // удаляет класс hidden
 
 
 var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
