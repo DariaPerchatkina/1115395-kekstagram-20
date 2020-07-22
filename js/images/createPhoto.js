@@ -2,23 +2,24 @@
 
 (function () {
   var createPhoto = {};
-  var mockData = window.mockData;
-  var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
+  // var mockData = window.mockData;
+  var form = window.form;
+  // var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
 
-  var fillPhotoTemplate = function (photo) { // создаем функцию, которая отрисовывает фото
-    var similarPhotoTemplate = document.querySelector('#picture') // находим элемент темплейт, куда вставим фото
-      .content
-      .querySelector('.picture');
+  // var fillPhotoTemplate = function (photo) { // создаем функцию, которая отрисовывает фото
+  //   var similarPhotoTemplate = document.querySelector('#picture') // находим элемент темплейт, куда вставим фото
+  //     .content
+  //     .querySelector('.picture');
 
-    var photoElement = similarPhotoTemplate.cloneNode(true); // делаем дубликат узла template
+  //   var photoElement = similarPhotoTemplate.cloneNode(true); // делаем дубликат узла template
 
-    photoElement.querySelector('.picture__img').src = photo.url;
-    photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
-    photoElement.querySelector('.picture__likes').textContent = photo.likes;
-    photoElement.dataset.id = photo.id;
+  //   photoElement.querySelector('.picture__img').src = photo.url;
+  //   photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
+  //   photoElement.querySelector('.picture__likes').textContent = photo.likes;
+  //   photoElement.dataset.id = photo.id;
 
-    return photoElement; // возвращаем полученный склонированный элемент с новым содержимым
-  };
+  //   return photoElement; // возвращаем полученный склонированный элемент с новым содержимым
+  // };
 
   var pictures = document.querySelector('.pictures');
   var renderPhotos = function (photoElem) {
@@ -29,41 +30,63 @@
     pictures.appendChild(fragment); // добавляет фрагмент в разметку
   };
 
-  renderPhotos(mockData.photos);
+  function onSuccess(pictures) {
+    renderPhotos(pictures);
+    pictures.addEventListener('click', function onCustomPhotoClick(evt) {
+      var picture = evt.target.closest('.picture');
+      if (picture) {
+        var id = picture.dataset.id;
+        window.bigPicture.open(pictures[id]);
+        document.addEventListener('keydown', form.onEscapePress);
+      }
+    });
+  }
 
-  // описание фотографии из рандомных данных и добавление в пустой массив commentssArr
-  var getRandomComments = function () { // создаем функцию, которая будет генерировать случайные комментарии от пользователя
-    var commentsArr = []; // делаем пустой массив данных
-    for (var i = 0; i <= mockData.getRandomNumber(1, 10); i++) { // условия работы цикла
-      // в процессе работы цикла создается объект
-      // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив commetsArr)
-      commentsArr.push(mockData.getCommentObj(mockData.MESSAGES, mockData.NAMES));
-    }
-    return commentsArr;
-  };
+  function onError(errorMessage) {
+    var main = document.querySelector('main');
+    var errorBlock = document.createElement('div');
+    errorBlock.classList.add('error-block');
+    errorBlock.textContent = errorMessage;
+    main.insertAdjacentElement('afterbegin', errorBlock);
+  }
+  // renderPhotos(mockData.photos);
 
-  var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
-    var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
-    var commentElement = commentItem.cloneNode(true); // делаем дубликат узла template
+  // // описание фотографии из рандомных данных и добавление в пустой массив commentssArr
+  // var getRandomComments = function () { // создаем функцию, которая будет генерировать случайные комментарии от пользователя
+  //   var commentsArr = []; // делаем пустой массив данных
+  //   for (var i = 0; i <= mockData.getRandomNumber(1, 10); i++) { // условия работы цикла
+  //     // в процессе работы цикла создается объект
+  //     // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив commetsArr)
+  //     commentsArr.push(mockData.getCommentObj(mockData.MESSAGES, mockData.NAMES));
+  //   }
+  //   return commentsArr;
+  // };
 
-    commentElement.querySelector('.social__picture').src = comment.avatar; // заполняет найденный по классу src содердимым из объекта commentObj
-    commentElement.querySelector('.social__picture').alt = comment.name; // -||- alt
-    commentElement.querySelector('.social__text').textContent = comment.message; // -||- текст комментария
+  // var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
+  //   var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
+  //   var commentElement = commentItem.cloneNode(true); // делаем дубликат узла template
 
-    return commentElement; // возвращает сформированный коммент
-  };
+  //   commentElement.querySelector('.social__picture').src = comment.avatar; // заполняет найденный по классу src содердимым из объекта commentObj
+  //   commentElement.querySelector('.social__picture').alt = comment.name; // -||- alt
+  //   commentElement.querySelector('.social__text').textContent = comment.message; // -||- текст комментария
 
-  var renderComments = function (commentsArr) {
-    var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
+  //   return commentElement; // возвращает сформированный коммент
+  // };
 
-    for (var i = 0; i < commentsArr.length; i++) { // цикл
-      fragment.appendChild(fillCommentElement(commentsArr[i])); // добавляет созданную фото во фрагмент
-    }
-    return fragment;
-  };
+  // var renderComments = function (commentsArr) {
+  //   var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
 
-  createPhoto.pictures = pictures;
-  createPhoto.getRandomComments = getRandomComments;
-  createPhoto.renderComments = renderComments;
+  //   for (var i = 0; i < commentsArr.length; i++) { // цикл
+  //     fragment.appendChild(fillCommentElement(commentsArr[i])); // добавляет созданную фото во фрагмент
+  //   }
+  //   return fragment;
+  // };
+
+  // createPhoto.pictures = pictures;
+  // createPhoto.getRandomComments = getRandomComments;
+  // createPhoto.renderComments = renderComments;
+
+  createPhoto.onError = onError;
+  createPhoto.onSuccess = onSuccess;
   window.renderPhoto = createPhoto;
 })();
