@@ -45,11 +45,11 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-
   var pinLine = {
     min: '0px',
     max: effectLevelLine.offsetWidth - effectLevelPin.offsetWidth + 'px'
   };
+
   // Функция для ограничения координат
   var setLimitCoordToSlider = function () {
     if (effectLevelPin.offsetLeft < 0 || effectLevelDepth.offsetLeft < 0) {
