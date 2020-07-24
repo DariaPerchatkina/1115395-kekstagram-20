@@ -2,7 +2,8 @@
 
 (function () {
   var createPhoto = {};
-  var mockData = window.mockData;
+  // var mockData = window.mockData;
+  var upload = window.upload;
   var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
 
   var fillPhotoTemplate = function (photo) { // создаем функцию, которая отрисовывает фото
@@ -22,7 +23,10 @@
 
   var pictures = document.querySelector('.pictures');
 
-  window.load(function (photo) {
+  // window.load(function (photo) {
+
+  // })
+  var successHandler = function (photos) {
     var renderPhotos = function (photoElem) {
       var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
       for (var i = 0; i < photoElem.length; i++) { // условия работы цикла, идет переборка массива случайно созданных фото
@@ -30,9 +34,32 @@
       }
       pictures.appendChild(fragment); // добавляет фрагмент в разметку
     };
-    renderPhotos(mockData.photos);
-  }, function () {});
+    renderPhotos(photos);
+  };
 
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.load(successHandler, errorHandler);
+
+  var imgUpload = document.querySelector('.img-upload');
+  var form = imgUpload.querySelector('.img-upload__form');
+  var submitHandler = function (evt) {
+    upload(new FormData(form), function () {
+      imgUpload.classList.add('hidden');
+    });
+    evt.preventDefault();
+  };
+  form.addEventListener('submit', submitHandler);
 
 
   // описание фотографии из рандомных данных и добавление в пустой массив commentssArr
@@ -57,7 +84,6 @@
     return commentElement; // возвращает сформированный коммент
   };
 
-  window.load(function)
   var renderComments = function (commentsArr) {
     var fragment = document.createDocumentFragment(); // создаем пустой объект DocumentFragment
 

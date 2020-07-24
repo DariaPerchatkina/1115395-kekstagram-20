@@ -2,11 +2,11 @@
 
 (function () {
   var URL_UPLOAD = 'https://javascript.pages.academy/kekstagram';
-  var CodeOk = 200;
-  var BadRequest = 400;
-  var NotFound = 404;
-  var InternalServerError = 500;
-  var TIME_OUT = 5000;
+  // var CodeOk = 200;
+  // var BadRequest = 400;
+  // var NotFound = 404;
+  // var InternalServerError = 500;
+  // var TIME_OUT = 5000;
 
   window.upload = function (data, onSuccess) {
     var xhr = new XMLHttpRequest();
@@ -16,7 +16,7 @@
       onSuccess(xhr.response);
     });
 
-    xhr.open('POST', URL);
+    xhr.open('POST', URL_UPLOAD);
     xhr.send(data);
   };
   // window.upload = function (url, onSuccess, onError) {
