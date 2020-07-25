@@ -1,9 +1,16 @@
 'use strict';
 
 (function () {
-  var picture = {};
+  var gallery = {};
   var commentsList = document.querySelector('.social__comments');
   var pictures = document.querySelector('.pictures');
+
+  var dropPhotos = function () {
+    var photos = document.querySelectorAll('.picture');
+    photos.forEach(function (item) {
+      pictures.removeChild(item);
+    });
+  };
 
   var fillPhotoTemplate = function (photo) {
     var similarPhotoTemplate = document.querySelector('#picture')
@@ -52,6 +59,7 @@
   var onLoad = function (photos) {
     window.photos = photos;
     renderPhotos(photos);
+    window.filters.initialize();
   };
 
   var onError = function (errorMessage) {
@@ -65,7 +73,9 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  picture.renderComments = renderComments;
+  gallery.renderPhotos = renderPhotos;
+  gallery.dropPhotos = dropPhotos;
+  gallery.renderComments = renderComments;
   window.api.loadData(onLoad, onError);
-  window.renderPhoto = picture;
+  window.gallery = gallery;
 })();
