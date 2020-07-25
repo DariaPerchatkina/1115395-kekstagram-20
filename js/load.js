@@ -2,12 +2,12 @@
 
 (function () {
   var load = {};
-  var createPhoto = window.createPhoto;
+  // var createPhoto = window.createPhoto;
   var StatusCode = {
     OK: 200
   };
   var TIMEOUT_IN_MS = 10000;
-  window.load = function (onSuccess, createPhoto.onError) {
+  window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 

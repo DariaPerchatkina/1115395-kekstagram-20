@@ -3,6 +3,7 @@
 (function () {
   var createPhoto = {};
   // var mockData = window.mockData;
+  var load = window.load;
   var upload = window.upload;
   var commentsList = document.querySelector('.social__comments'); // находит по классу в разметке список с комментариями
 
@@ -49,7 +50,7 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.load(successHandler, errorHandler);
+  load(successHandler, errorHandler);
 
   var imgUpload = document.querySelector('.img-upload');
   var form = imgUpload.querySelector('.img-upload__form');
@@ -62,16 +63,16 @@
   form.addEventListener('submit', submitHandler);
 
 
-  // описание фотографии из рандомных данных и добавление в пустой массив commentssArr
-  var getRandomComments = function () { // создаем функцию, которая будет генерировать случайные комментарии от пользователя
-    var commentsArr = []; // делаем пустой массив данных
-    for (var i = 0; i <= mockData.getRandomNumber(1, 10); i++) { // условия работы цикла
-      // в процессе работы цикла создается объект
-      // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив commetsArr)
-      commentsArr.push(mockData.getCommentObj(mockData.MESSAGES, mockData.NAMES));
-    }
-    return commentsArr;
-  };
+  // // описание фотографии из рандомных данных и добавление в пустой массив commentssArr
+  // var getRandomComments = function () { // создаем функцию, которая будет генерировать случайные комментарии от пользователя
+  //   var commentsArr = []; // делаем пустой массив данных
+  //   for (var i = 0; i <= mockData.getRandomNumber(1, 10); i++) { // условия работы цикла
+  //     // в процессе работы цикла создается объект
+  //     // создадим обьект и при помощи push добавим его в массив arr(в нашем случае это пустой массив commetsArr)
+  //     commentsArr.push(mockData.getCommentObj(mockData.MESSAGES, mockData.NAMES));
+  //   }
+  //   return commentsArr;
+  // };
 
   var fillCommentElement = function (comment) { // создаем функцию, для формирования коммента для элемента списка
     var commentItem = commentsList.querySelector('.social__comment'); // находит по классу элемент списка
@@ -94,7 +95,7 @@
   };
 
   createPhoto.pictures = pictures;
-  createPhoto.getRandomComments = getRandomComments;
+  // createPhoto.getRandomComments = getRandomComments;
   createPhoto.renderComments = renderComments;
   window.renderPhoto = createPhoto;
 })();
