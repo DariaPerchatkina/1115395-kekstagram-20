@@ -2,13 +2,10 @@
 
 (function () {
   var validation = {};
-  var form = window.form;
   var inputHashtag = document.querySelector('.text__hashtags');
   var MAX_LENGT_HASHTAG = 20;
   var HASHTAG_COUNT = 5;
   var SYMBOL = /[#-a-z0-9а-яA-ZА-Я]/;
-  var textDescription = document.querySelector('.text__description');
-
   // валидация
   var hashtagsValidity = function () {
     // создаем переменную, которая содержит длину хэштега
@@ -43,33 +40,7 @@
     }
   };
 
-  if (textDescription.value) {
-    if (textDescription.length > 140) {
-      textDescription.setCustomValidity('Текст комментария не должен превышать 140 символов');
-    } else {
-      textDescription.setCustomValidity('');
-    }
-  }
-
   inputHashtag.addEventListener('input', hashtagsValidity);
-
-  inputHashtag.addEventListener('focus', function () {
-    document.removeEventListener('keydown', form.onPopupEscPress);
-  });
-
-  inputHashtag.addEventListener('blur', function () {
-    document.addEventListener('keydown', form.onPopupEscPress);
-  });
-
-  // валидация - когда фокус на комменте - не закрывать его
-  textDescription.addEventListener('focus', function () {
-    document.removeEventListener('keydown', form.onPopupEscPress);
-  });
-
-  textDescription.addEventListener('blur', function () {
-    document.addEventListener('keydown', form.onPopupEscPress);
-  });
-
 
   window.validation = validation;
 })();

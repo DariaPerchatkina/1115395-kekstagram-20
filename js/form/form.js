@@ -2,27 +2,46 @@
 
 (function () {
   var form = {};
+  var formMessage = window.formMessage;
   var utils = window.utils;
-  var uploadForm = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
+  var uploadFormOverlay = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
+  var uploadForm = document.querySelector('.img-upload__form');
   var uploadCancel = document.querySelector('#upload-cancel'); // находит в разметке по id кнопку отмены
   var uploadFile = document.querySelector('#upload-file'); // находит в разметке по id скрытый инпут
+  var inputHashtag = document.querySelector('.text__hashtags');
+  var textDescription = document.querySelector('.text__description');
 
-  // открытие формы загрузки фото
   var formOpen = function () { // описывает открытие формы
-    uploadForm.classList.remove('hidden'); // у формы в расметке удаляет класс hidden
+    uploadFormOverlay.classList.remove('hidden'); // у формы в расметке удаляет класс hidden
     document.body.classList.add('modal-open'); // добавляет body класс modal-open
   };
 
   var formClose = function () { // функция закрытия формы
-    uploadForm.classList.add('hidden'); // добавляет класс hidden
+    uploadFormOverlay.classList.add('hidden'); // добавляет класс hidden
     document.body.classList.remove('modal-open'); // удаляет класс открытия модального окна
   };
 
   var onPopupEscPress = function (evt) { // управление модалкой при помощи клавиатуры
+    evt.preventDefault();
     if (evt.key === utils.ESC_KEY) { // если событие с клавиатуры строго равно значению эскейп на клавиатуре, то вызовется функция закрытия попапа
-      evt.preventDefault();
       formClose();
     }
+  };
+
+  var onUpload = function () {
+    formClose();
+    formMessage.showSuccess();
+  };
+
+  var onError = function () {
+    formClose();
+    formMessage.showError();
+  };
+
+  var onUploadFormSubmit = function (evt) {
+    evt.preventDefault();
+    var formData = new FormData(uploadForm);
+    window.api.uploadData(formData, onUpload, onError);
   };
 
   var openPhoto = function () {
@@ -34,11 +53,28 @@
     document.removeEventListener('keydown', onPopupEscPress);
     formClose();
   };
-  // слушаем событие change на инпуте и открываем форму загрузки фото и открываем форму
-  uploadFile.addEventListener('change', openPhoto);
 
-  // слушаем обработчик события на крестике и закрываем форму
+
+  inputHashtag.addEventListener('focus', function () {
+    document.removeEventListener('keydown', onPopupEscPress);
+  });
+
+  inputHashtag.addEventListener('blur', function () {
+    document.addEventListener('keydown', onPopupEscPress);
+  });
+
+  textDescription.addEventListener('focus', function () {
+    document.removeEventListener('keydown', onPopupEscPress);
+  });
+
+  textDescription.addEventListener('blur', function () {
+    document.addEventListener('keydown', onPopupEscPress);
+  });
+
+
+  uploadFile.addEventListener('change', openPhoto);
   uploadCancel.addEventListener('click', closePhoto);
+  uploadForm.addEventListener('submit', onUploadFormSubmit);
 
   window.form = form;
 })();
