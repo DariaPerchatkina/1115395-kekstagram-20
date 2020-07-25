@@ -42,7 +42,6 @@
     }
   };
 
-
   var resetFilter = function () {
     effectLevelValue.value = 100;
     effectLevelPin.style.left = 100 + '%';

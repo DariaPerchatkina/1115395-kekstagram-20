@@ -11,10 +11,16 @@
     STEP: 25,
     MEASURE: '%'
   };
+  var scaleControlInput = document.querySelector('.scale__control--value');
 
-  // редактирование размера фото
   var setPhotoSize = function (value) {
     imgUploadPreview.style.transform = 'scale(' + (value / 100) + ')';
+    scaleControlInput.value = value + scaleParam.MEASURE;
+  };
+
+  var dropPhotoSize = function () {
+    imgUploadPreview.style.transform = '';
+    scaleControlInput.value = scaleParam.MAX + scaleParam.MEASURE;
   };
 
   var onScaleControlClick = function (evt) {
@@ -31,6 +37,7 @@
 
   imgUploadScale.addEventListener('click', onScaleControlClick);
 
+  scale.dropPhotoSize = dropPhotoSize;
   scale.scaleControlValue = scaleControlValue;
   scale.imgUploadPreview = imgUploadPreview;
   window.scale = scale;
