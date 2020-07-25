@@ -10,7 +10,7 @@
   var effectLevelDepth = document.querySelector('.effect-level__depth');
   var effectLevelLine = document.querySelector('.effect-level__line');
 
-  var getFilterValue = function (filterName, percent) {
+  var setFilterValue = function (filterName, percent) {
     if (filterName === 'none') {
       imgUploadPreview.style.filter = '';
     }
@@ -33,12 +33,7 @@
 
   imgUploadEffectLevel.classList.add('hidden');
 
-  var filterChange = function (evt) {
-    effectLevelValue.value = 100;
-    effectLevelPin.style.left = 100 + '%';
-    effectLevelDepth.style.width = 100 + '%';
-    imgUploadPreview.classList = '';
-    imgUploadPreview.style.filter = '';
+  var onfilterChange = function (evt) {
     imgUploadPreview.classList.add('effects__preview--' + evt.target.value);
     if (evt.target.value !== 'none') {
       imgUploadEffectLevel.classList.remove('hidden');
@@ -46,7 +41,16 @@
       imgUploadEffectLevel.classList.add('hidden');
     }
   };
-  effectsList.addEventListener('change', filterChange);
+
+
+  var resetFilter = function () {
+    effectLevelValue.value = 100;
+    effectLevelPin.style.left = 100 + '%';
+    effectLevelDepth.style.width = 100 + '%';
+    imgUploadPreview.classList = '';
+    imgUploadPreview.style.filter = '';
+    effectsList.querySelector('#effect-none').checked = true;
+  };
 
   var getLevelPin = function () {
     var positionX = effectLevelPin.offsetLeft;
@@ -58,9 +62,12 @@
 
   var changeFilterValue = function () {
     var current = document.querySelector('.effects__radio:checked');
-    getFilterValue(current.value, getLevelPin());
+    setFilterValue(current.value, getLevelPin());
   };
 
+  effectsList.addEventListener('change', onfilterChange);
+
+  effect.resetFilter = resetFilter;
   effect.changeFilterValue = changeFilterValue;
   window.effect = effect;
 })();
