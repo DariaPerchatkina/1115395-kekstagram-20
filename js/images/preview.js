@@ -9,9 +9,9 @@
   var buttonLoader = document.querySelector('.comments-loader');
   var commentCount = document.querySelector('.social__comment-count');
   var commentsList = bigPicture.querySelector('.social__comments');
-  var count = 0;
-  var MAX_COUNT_COMMENTS = 5;
-  var commentsCopy = [];
+  // var count = 0;
+  // var MAX_COUNT_COMMENTS = 5;
+  // var commentsCopy = [];
 
   var dropCommets = function () {
     while (commentsList.firstChild) {
