@@ -24,8 +24,6 @@
       currentPointX = moveEvent.clientX;
       ratio = passedX / parentWidth;
 
-      // window.slider = ratio;
-
       effectLevelPin.style.left = (ratio * 100) + '%';
       effectLevelDepth.style.width = (ratio * 100) + '%';
       effectLevelLine.value = Math.round(ratio * 100);

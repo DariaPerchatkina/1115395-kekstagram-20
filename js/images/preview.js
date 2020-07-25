@@ -2,7 +2,7 @@
 
 (function () {
   var preview = {};
-  var picture = window.renderPhoto;
+  var gallery = window.gallery;
   var utils = window.utils;
   var pictures = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
@@ -18,7 +18,7 @@
     bigPicture.querySelector('.social__caption').textContent = photo.description;
     bigPicture.querySelector('.likes-count').textContent = photo.likes;
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
-    bigPicture.querySelector('.social__comments').appendChild(picture.renderComments(photo.comments));
+    bigPicture.querySelector('.social__comments').appendChild(gallery.renderComments(photo.comments));
   };
 
   var getPictureData = function (data, pictureId) {
