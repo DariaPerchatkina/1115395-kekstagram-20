@@ -2,28 +2,40 @@
 
 (function () {
   var form = {};
+  var scale = window.scale;
+  var effects = window.effect;
   var formMessage = window.formMessage;
   var utils = window.utils;
-  var uploadFormOverlay = document.querySelector('.img-upload__overlay'); // находит в разметке по id форму
+  var uploadFormOverlay = document.querySelector('.img-upload__overlay');
   var uploadForm = document.querySelector('.img-upload__form');
-  var uploadCancel = document.querySelector('#upload-cancel'); // находит в разметке по id кнопку отмены
-  var uploadFile = document.querySelector('#upload-file'); // находит в разметке по id скрытый инпут
+  var uploadCancel = document.querySelector('#upload-cancel');
+  var uploadFile = document.querySelector('#upload-file');
   var inputHashtag = document.querySelector('.text__hashtags');
   var textDescription = document.querySelector('.text__description');
 
-  var formOpen = function () { // описывает открытие формы
-    uploadFormOverlay.classList.remove('hidden'); // у формы в расметке удаляет класс hidden
-    document.body.classList.add('modal-open'); // добавляет body класс modal-open
+
+  var resetFormValues = function () {
+    scale.dropPhotoSize();
+    effects.resetFilter();
+    inputHashtag.value = '';
+    textDescription.value = '';
+    uploadFile.value = '';
   };
 
-  var formClose = function () { // функция закрытия формы
-    uploadFormOverlay.classList.add('hidden'); // добавляет класс hidden
-    document.body.classList.remove('modal-open'); // удаляет класс открытия модального окна
+  var formOpen = function () {
+    uploadFormOverlay.classList.remove('hidden');
+    document.body.classList.add('modal-open');
   };
 
-  var onPopupEscPress = function (evt) { // управление модалкой при помощи клавиатуры
+  var formClose = function () {
+    uploadFormOverlay.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    resetFormValues();
+  };
+
+  var onPopupEscPress = function (evt) {
     evt.preventDefault();
-    if (evt.key === utils.ESC_KEY) { // если событие с клавиатуры строго равно значению эскейп на клавиатуре, то вызовется функция закрытия попапа
+    if (evt.key === utils.ESC_KEY) {
       formClose();
     }
   };
@@ -53,7 +65,6 @@
     document.removeEventListener('keydown', onPopupEscPress);
     formClose();
   };
-
 
   inputHashtag.addEventListener('focus', function () {
     document.removeEventListener('keydown', onPopupEscPress);
