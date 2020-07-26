@@ -22,12 +22,12 @@
     uploadFile.value = '';
   };
 
-  var formOpen = function () {
+  var open = function () {
     uploadFormOverlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
   };
 
-  var formClose = function () {
+  var close = function () {
     uploadFormOverlay.classList.add('hidden');
     document.body.classList.remove('modal-open');
     resetFormValues();
@@ -36,17 +36,17 @@
   var onPopupEscPress = function (evt) {
     evt.preventDefault();
     if (evt.key === utils.ESC_KEY) {
-      formClose();
+      close();
     }
   };
 
   var onUpload = function () {
-    formClose();
+    close();
     formMessage.showSuccess();
   };
 
   var onError = function () {
-    formClose();
+    close();
     formMessage.showError();
   };
 
@@ -58,12 +58,12 @@
 
   var openPhoto = function () {
     document.addEventListener('keydown', onPopupEscPress);
-    formOpen();
+    open();
   };
 
   var closePhoto = function () {
     document.removeEventListener('keydown', onPopupEscPress);
-    formClose();
+    close();
   };
 
   inputHashtag.addEventListener('focus', function () {

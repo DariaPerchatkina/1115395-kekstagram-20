@@ -25,10 +25,10 @@
 
   var renderPhotos = function (photoElem) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photoElem.length; i++) {
-      photoElem[i].id = i;
-      fragment.appendChild(fillPhotoTemplate(photoElem[i]));
-    }
+    photoElem.forEach(function (photoElement, i) {
+      photoElement.id = i;
+      fragment.appendChild(fillPhotoTemplate(photoElement));
+    });
     pictures.appendChild(fragment);
   };
 

@@ -34,6 +34,7 @@
   imgUploadEffectLevel.classList.add('hidden');
 
   var onfilterChange = function (evt) {
+    imgUploadPreview.classList = '';
     imgUploadPreview.classList.add('effects__preview--' + evt.target.value);
     if (evt.target.value !== 'none') {
       imgUploadEffectLevel.classList.remove('hidden');

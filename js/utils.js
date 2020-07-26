@@ -17,15 +17,15 @@
   var fisherYates = function (array, length) {
     var len = length < array.length ? length : array.length;
     var copy = array.slice(0);
-    var result = [];
+    var results = [];
     var temp;
 
     for (var i = 0; i < len; i++) {
       temp = getRandomNumber(0, copy.length - 1);
-      result.push(copy.splice(temp, 1)[0]);
+      results.push(copy.splice(temp, 1)[0]);
     }
 
-    return result;
+    return results;
   };
 
   var debounce = function (callBack, intervalal) {
